@@ -7,4 +7,5 @@ import robocode.TeamRobot;
  */
 public class Droid extends TeamRobot implements robocode.Droid {
     //Hoi gerton
+    // Sup
 }
