@@ -62,33 +62,45 @@ public class killerByte extends TeamRobot {
      * @param targetTank The tank that we've spotted
      */
     public void chase( ScannedRobotEvent targetTank){
-        //My radar is pointed towards the enemy, i need my body to point in the same direction
-        setTurnRight(targetTank.getBearing());
+        if(!targetTank.getName().startsWith("EHI1VSo_1_KillerBytes")) {
+            //My radar is pointed towards the enemy, i need my body to point in the same direction
+            setTurnRight(targetTank.getBearing());
 
-        //my radar needs to lock on to the target.
-        double radarPosition = normalRelativeAngleDegrees(targetTank.getBearing() +  getHeading() - getRadarHeading());
-        setTurnRadarRight(radarPosition);
+            //my radar needs to lock on to the target.
+            double radarPosition = normalRelativeAngleDegrees(targetTank.getBearing() +  getHeading() - getRadarHeading());
+            setTurnRadarRight(radarPosition);
 
-        double directionToTarget = getHeading() - getGunHeading();
-        setTurnGunRight(directionToTarget);
+            double directionToTarget = getHeading() - getGunHeading();
+            setTurnGunRight(directionToTarget);
 
-        setAhead(targetTank.getDistance() );
-        if(targetTank.getDistance() < 140){
-            if(targetTank.getDistance() > 120){
-                fire(targetTank, 1.5);
-            } else if (targetTank.getDistance() > 100) {
-                fire(targetTank, 2);
+            setAhead(targetTank.getDistance() );
+
+            if(targetTank.getDistance() < 140){
+                if(targetTank.getDistance() > 120){
+                    fire(targetTank, 1.5);
+                } else if (targetTank.getDistance() > 100) {
+                    fire(targetTank, 2);
+                }
+                else {
+                    fire(targetTank, 3);
+                }
             }
-            else {
-                fire(targetTank, 3);
+        }
+        else{
+            if(targetTank.getDistance() < 60) {
+                setBack(20);
+                setTurnRight(20);
             }
+            System.out.println("Ally " + targetTank.getName() + " is in the way!");
         }
         execute();
     }
 
     public void fire(ScannedRobotEvent target, double power){
-        if(!target.getName().startsWith("EO1")){
+        //TODO: Check if an ally is in the way.
+        //TODO: If an ally is in the way and his energy is low, tell him to move
+        if(!target.getName().startsWith("EHI1VSo_1_KillerBytes")) {
+            fire(power);
         }
-        fire(power);
     }
 }
