@@ -1,9 +1,7 @@
 package EHI1VSo_1_KillerBytes;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.jar.Pack200;
 
 public class EnemyStatistics{
     private boolean leaderAlive;
