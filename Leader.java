@@ -21,8 +21,6 @@ public class Leader extends KillerByte {
     EnemyStatistics enemyStats = new EnemyStatistics();
 
     public void run(){
-
-
         allyStats = new AllyStatistics("EHI1VSo_1_KillerBytes.Leader");
         allyStats.addAlly(this);
         setAdjustGunForRobotTurn(true);
