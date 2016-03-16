@@ -15,15 +15,17 @@ import static robocode.util.Utils.normalRelativeAngleDegrees;
  */
 public class RobotOne extends KillerByte implements Serializable {
     private EnemyStatistics enemyStats;
-    private AllyStatistics allyStats;
+    private AllyStatistics allyStats = null;
     Boolean isLeader = false;
-
-    public void run() {
+    Boolean running = false;
+    public void run(){
+        running = true;
         enemyStats = new EnemyStatistics();
         while(true){
             //TODO: Every tick, a robot reports itself to the leader
             //TODO:
-            reportTo(allyStats.getLeader());
+            if(allyStats != null)
+                reportTo(allyStats.getLeader());
             scan();
             execute();
         }
@@ -43,13 +45,15 @@ public class RobotOne extends KillerByte implements Serializable {
     }
 
     public void onMessageReceived(MessageEvent e){
-        System.out.println("i received a message from "+ e.getSender());
-        if(e.getMessage() instanceof AllyStatistics){
-            System.out.println("Is an allystats thingy");
-            if (!((AllyStatistics) e.getMessage()).getAllies().containsKey(this.getName())) {
-                //This is only going to happen once. It's the leader requesting me to register.
-                System.out.println("I'm not registered yet");
-                sendMsg(((AllyStatistics) e.getMessage()).getLeader(), this);
+        if(running){
+            System.out.println("i received a message from "+ e.getSender());
+            if(e.getMessage() instanceof AllyStatistics){
+                System.out.println("Is an allystats thingy");
+                if (!((AllyStatistics) e.getMessage()).getAllies().containsKey("EHI1VSo_1_KillerBytes.RobotOne")) {
+                    //This is only going to happen once. It's the leader requesting me to register.
+                    System.out.println("I'm not registered yet");
+                    sendMsg(((AllyStatistics) e.getMessage()).getLeader(), this);
+                }
             }
         }
     }

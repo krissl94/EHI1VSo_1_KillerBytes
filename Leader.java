@@ -19,9 +19,7 @@ public class Leader extends KillerByte {
     EnemyStatistics enemyStats = new EnemyStatistics();
 
     public void run(){
-        // Fixed error at allyStats
-        if(allyStats == null) this.allyStats = new AllyStatistics(this.getName());
-
+        allyStats = new AllyStatistics("EHI1VSo_1_KillerBytes.Leader");
         setAdjustGunForRobotTurn(true);
         setAdjustRadarForGunTurn(true);
         setAdjustRadarForRobotTurn(true);
@@ -39,20 +37,22 @@ public class Leader extends KillerByte {
 
     public void onMessageReceived(MessageEvent e){
         //TODO: Check if it's an enemy object or an ally object
-        System.out.println("i received a message from " + e.getSender());
+        System.out.println("i received a message from "+ e.getSender());
         if(e.getMessage() instanceof TeamRobot){
             System.out.println("Is ally data!");
             if (!(allyStats).getAllies().containsKey(e.getSender())) {
                 System.out.println("He's not registered yet!");
-                allyStats.addAlly((TeamRobot)e.getMessage());
+                allyStats.addAlly((TeamRobot) e.getMessage());
+            } else {
+                System.out.println("He's registered already! Updating..");
+                allyStats.updateAlly((TeamRobot) e.getMessage());
             }
-        } else if(e.getMessage() instanceof EnemyBot){
+        } else if (e.getMessage() instanceof EnemyBot) {
             System.out.println("Is enemy data!");
             if (!(enemyStats).getEnemies().containsKey(((EnemyBot) e.getMessage()).getName())) {
                 System.out.println("He's not registered yet!");
                 enemyStats.addEnemy((EnemyBot) e.getMessage());
-            }
-            else {
+            } else {
                 System.out.println("He's registered, but i need to update him");
                 enemyStats.updateEnemy((EnemyBot) e.getMessage());
             }
@@ -70,6 +70,9 @@ public class Leader extends KillerByte {
     //TODO Delete in final
     public void drawDebug(Graphics2D g){
         // Draw scan circles
+        String[] teamMates = getTeammates();
+
+
         //Draw scan circle on self
         g.setColor(Color.green);
         g.drawOval((int) this.getX() - 600, (int) this.getY() - 600, 1200, 1200);
@@ -95,5 +98,6 @@ public class Leader extends KillerByte {
                 g.drawString(entry.getKey(),position[0]-(entry.getKey().length()),position[1]+10);
             }
         }
+
     }
 }

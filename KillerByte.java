@@ -13,7 +13,7 @@ import static robocode.util.Utils.normalRelativeAngleDegrees;
 /**
  * Created by kris on 10-3-16.
  */
-public class KillerByte extends TeamRobot {
+public class KillerByte extends TeamRobot implements Serializable {
     public void smartShooting(){
 
     }
@@ -101,6 +101,26 @@ public class KillerByte extends TeamRobot {
         execute();
     }
 
+    public void calculateCoordinates(ScannedRobotEvent e){
+        double myX = getX();
+        System.out.println("My X = " + myX);
+        double myY = getY();
+        System.out.println("My Y = " + myY);
+
+        double enemyDistance = e.getDistance();
+        System.out.println("Enemy distance = " + enemyDistance);
+        double enemyBearing = e.getBearingRadians();
+        System.out.println("Enemy bearing = " + enemyBearing);
+
+        double absoluteBearing = getHeadingRadians() + e.getBearingRadians();
+        double enemyX = myX + (enemyDistance * Math.sin(absoluteBearing));
+        double enemyY = myY + (enemyDistance * Math.cos(absoluteBearing));
+
+        System.out.println("Enemy " + e.getName() +" X = " + enemyX);
+        System.out.println("Enemy " + e.getName() +"Y = " + enemyY);
+
+    }
+
     public void fire(ScannedRobotEvent target, double power){
         //TODO: Check if an ally is in the way.
         //TODO: If an ally is in the way and his energy is low, tell him to move
@@ -135,6 +155,10 @@ public class KillerByte extends TeamRobot {
     }
 
     public void reportTo(String leader){
+        try{
+            sendMessage(leader, this);
+        } catch(IOException IOE){
 
+        }
     }
 }
