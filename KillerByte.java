@@ -136,6 +136,10 @@ public class KillerByte extends TeamRobot implements Serializable {
 
     public void moveTo(double x, double y){
         //TODO: X and Y are coordinates the robot should drive to
+//        turnRightRadians(e.getBearingRadians());
+//        setAhead(enemyDistance);
+//        fire(2);
+
     }
 
     public void sendMessage(){
