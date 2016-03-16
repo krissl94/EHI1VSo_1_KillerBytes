@@ -62,6 +62,9 @@ public class killerByte extends TeamRobot {
      * @param targetTank The tank that we've spotted
      */
     public void chase( ScannedRobotEvent targetTank){
+        //TODO: MoveTo target, calculate which coordinates
+        //TODO:                      If health is low, keep distance
+        //TODO:                      If health is high, go in for a ram
         if(!targetTank.getName().startsWith("EHI1VSo_1_KillerBytes")) {
             //My radar is pointed towards the enemy, i need my body to point in the same direction
             setTurnRight(targetTank.getBearing());
@@ -102,5 +105,23 @@ public class killerByte extends TeamRobot {
         if(!target.getName().startsWith("EHI1VSo_1_KillerBytes")) {
             fire(power);
         }
+    }
+
+    public void moveTo(double x, double y){
+        //TODO: X and Y are coordinates the robot should drive to
+    }
+
+    public void sendMessage(){
+        //TODO: Find robot with leader role and send him the info
+    }
+
+    public void processData(){
+        //TODO: Leader Robot processes the data and broadcasts it
+
+        broadcastStats(null);
+    }
+
+    public void broadcastStats(EnemyStatistics stats){
+        //TODO: Broadcast data
     }
 }
