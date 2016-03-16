@@ -13,10 +13,11 @@ import java.util.ArrayList;
 public class Leader extends KillerByte {
     String targetName;
     Boolean isLeader = true;
-    AllyStatistics allyStats = new AllyStatistics(this.getName());
+    AllyStatistics allyStats;
     EnemyStatistics enemyStats = new EnemyStatistics();
 
     public void run(){
+        allyStats = new AllyStatistics(this.getName());
         setAdjustGunForRobotTurn(true);
         setAdjustRadarForGunTurn(true);
         setAdjustRadarForRobotTurn(true);
@@ -41,6 +42,10 @@ public class Leader extends KillerByte {
                 System.out.println("He's not registered yet!");
                 allyStats.addAlly((TeamRobot)e.getMessage());
             }
+            else{
+                System.out.println("He's registered already! Updating..");
+                allyStats.updateAlly((TeamRobot) e.getMessage());
+            }
         } else if(e.getMessage() instanceof EnemyBot){
             System.out.println("Is enemy data!");
             if (!(enemyStats).getEnemies().containsKey(((EnemyBot) e.getMessage()).getName())) {
@@ -52,8 +57,6 @@ public class Leader extends KillerByte {
                 enemyStats.updateEnemy((EnemyBot) e.getMessage());
             }
         }
-
-
     }
 
 
