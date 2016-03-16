@@ -3,6 +3,9 @@ package EHI1VSo_1_KillerBytes;
 import robocode.MessageEvent;
 import robocode.ScannedRobotEvent;
 import robocode.TeamRobot;
+//TODO Delete in final
+import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Created by kris on 9-3-16.
@@ -50,6 +53,35 @@ public class Leader extends KillerByte {
             }
         }
 
+
+    }
+
+
+    //TODO Delete in final
+    public void onPaint(Graphics2D g){
+        drawDebug(g);
+    }
+
+    //TODO Delete in final
+    public void drawDebug(Graphics2D g){
+        // Draw scan circles
+        String[] teamMates = getTeammates();
+
+
+        //Draw scan circle on self
+        g.setColor(Color.green);
+        g.drawOval((int) this.getX() - 600, (int) this.getY() - 600, 1200, 1200);
+
+        //draw labels on each sides of the circle.
+        g.drawString("ScanRange",(float)this.getX()-600,(float)this.getY());
+        g.drawString("ScanRange",(int)this.getX(),(int)this.getY()-600);
+        g.drawString("ScanRange",(int)this.getX(),(int)this.getY()+600);
+        g.drawString("ScanRange",(int)this.getX()+600,(int)this.getY());
+
+
+        for(String mate : teamMates){
+
+        }
 
     }
 }
