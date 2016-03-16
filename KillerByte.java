@@ -13,7 +13,7 @@ import static robocode.util.Utils.normalRelativeAngleDegrees;
 /**
  * Created by kris on 10-3-16.
  */
-public class KillerByte extends TeamRobot {
+public class KillerByte extends TeamRobot implements Serializable {
     public void smartShooting(){
 
     }
@@ -155,6 +155,10 @@ public class KillerByte extends TeamRobot {
     }
 
     public void reportTo(String leader){
+        try{
+            sendMessage(leader, this);
+        } catch(IOException IOE){
 
+        }
     }
 }

@@ -30,7 +30,14 @@ public class AllyStatistics implements Serializable{
         return allies;
     }
 
+    public TeamRobot getAlly(String name) {
+        return allies.get(name);
+    }
+
     public void addAlly(TeamRobot ally) {
         this.allies.put(ally.getName(), ally);
+    }
+    public void updateAlly(TeamRobot ally){
+        this.allies.replace(ally.getName(), ally);
     }
 }
