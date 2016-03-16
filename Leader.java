@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by kris on 9-3-16.
@@ -20,6 +21,8 @@ public class Leader extends KillerByte {
     EnemyStatistics enemyStats = new EnemyStatistics();
 
     public void run(){
+
+
         allyStats = new AllyStatistics("EHI1VSo_1_KillerBytes.Leader");
         allyStats.addAlly(this);
         setAdjustGunForRobotTurn(true);
@@ -29,6 +32,10 @@ public class Leader extends KillerByte {
         //TODO: Broadcast an initialized object
         broadcastStats(allyStats);
         while(true){
+            // SET RANDOM COLORS
+            Random random = new Random();
+            this.setColors(Color.getHSBColor(random.nextFloat(),random.nextFloat(),random.nextFloat()),Color.getHSBColor(random.nextFloat(),random.nextFloat(),random.nextFloat()),Color.getHSBColor(random.nextFloat(),random.nextFloat(),random.nextFloat()));
+
             super.goCrazy();
         }
     }
@@ -36,10 +43,12 @@ public class Leader extends KillerByte {
     //Leader has no specific tasks, because another robot should be able to take over the position
     public void onScannedRobot(ScannedRobotEvent TargetTank){
         super.chase(TargetTank);
+        TargetTank.getBearing();
     }
 
     public void onMessageReceived(MessageEvent e){
         //TODO: Check if it's an enemy object or an ally object
+        // functie : isFriendly(name), ez
         System.out.println("i received a message from "+ e.getSender());
         if(e.getMessage() instanceof TeamRobot){
             System.out.println("Is ally data!");
@@ -86,30 +95,26 @@ public class Leader extends KillerByte {
         g.drawString("ScanRange",(int)this.getX(),(int)this.getY()+600);
         g.drawString("ScanRange",(int)this.getX()+600,(int)this.getY());
 
-
         // Draw square at last known enemy position, also put the co-ordinates in text above.
-        for(Map.Entry<String,EnemyBot> entry: enemyStats.getEnemies().entrySet())
-        {
+        for(Map.Entry<String,EnemyBot> entry: enemyStats.getEnemies().entrySet()) {
             EnemyBot enemy = entry.getValue();
             ArrayList<int[]> positions = enemy.getRecordedPositions();
 
-            for(int[] position:positions){
+            for (int[] position : positions) {
 
                 // change color of square to red if it's the last entry
-                if(position == positions.get(positions.size())){
+                if (position == positions.get(positions.size())) {
                     g.setColor(Color.RED);
-                }
-                else{
+                }// else set color to CYAN (light blue)
+                else {
                     g.setColor(Color.CYAN);
                 }
-
                 g.drawRect(position[0], position[1], 10, 10);
                 // display text; X,Y
-                g.drawString(String.valueOf(position[0])+","+String.valueOf(position[1]),position[0],position[1]-10);
+                g.drawString(String.valueOf(position[0]) + "," + String.valueOf(position[1]), position[0], position[1] - 10);
                 // display text; bot name;
-                g.drawString(entry.getKey(),position[0]-(entry.getKey().length()),position[1]+10);
+                g.drawString(entry.getKey(), position[0] - (entry.getKey().length()), position[1] + 10);
             }
         }
-
     }
 }
