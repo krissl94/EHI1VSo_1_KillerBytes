@@ -4,6 +4,8 @@ import robocode.ScannedRobotEvent;
 import robocode.TeamRobot;
 import robocode.TurnCompleteCondition;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.Random;
 
 import static robocode.util.Utils.normalRelativeAngleDegrees;
@@ -11,7 +13,7 @@ import static robocode.util.Utils.normalRelativeAngleDegrees;
 /**
  * Created by kris on 10-3-16.
  */
-public class killerByte extends TeamRobot {
+public class KillerByte extends TeamRobot {
     public void smartShooting(){
 
     }
@@ -121,7 +123,18 @@ public class killerByte extends TeamRobot {
         broadcastStats(null);
     }
 
-    public void broadcastStats(EnemyStatistics stats){
+    public void broadcastStats(Serializable stats){
         //TODO: Broadcast data
+        try{
+            broadcastMessage(stats);
+        } catch(IOException IOE) {
+            //TODO: Find out which robot isn't responding
+            System.out.println(IOE.getCause());
+
+        }
+    }
+
+    public void reportTo(String leader){
+
     }
 }
