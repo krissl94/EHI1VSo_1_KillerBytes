@@ -19,7 +19,7 @@ public class RobotOne extends KillerByte implements Serializable {
     Boolean isLeader = false;
 
     public void run() {
-        enemystats = new EnemyStatistics();
+        enemyStats = new EnemyStatistics();
         while(true){
             //TODO: Every tick, a robot reports itself to the leader
             //TODO:
