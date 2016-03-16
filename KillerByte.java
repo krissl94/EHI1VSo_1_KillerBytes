@@ -1,5 +1,6 @@
 package EHI1VSo_1_KillerBytes;
 
+import robocode.MessageEvent;
 import robocode.ScannedRobotEvent;
 import robocode.TeamRobot;
 import robocode.TurnCompleteCondition;
@@ -14,6 +15,10 @@ import static robocode.util.Utils.normalRelativeAngleDegrees;
  * Created by kris on 10-3-16.
  */
 public class KillerByte extends TeamRobot implements Serializable {
+    public String name;
+    public AllyStatistics allyStats = null;
+    public EnemyStatistics enemyStats;
+
     public void smartShooting(){
 
     }
@@ -159,6 +164,28 @@ public class KillerByte extends TeamRobot implements Serializable {
             sendMessage(leader, this);
         } catch(IOException IOE){
 
+        }
+    }
+
+    public void messageReceived(MessageEvent e){
+        System.out.println("i received a message from "+ e.getSender());
+        if(e.getMessage() instanceof AllyStatistics){
+            allyStats = (AllyStatistics)e.getMessage();
+
+            System.out.println("Is an allystats thingy");
+            if (!((AllyStatistics) e.getMessage()).getAllies().containsKey(this.getName())) {
+                //This is only going to happen once. It's the leader requesting me to register.
+                System.out.println("I'm not registered yet");
+                sendMsg(((AllyStatistics) e.getMessage()).getLeader(), this);
+            }
+        }
+    }
+    public void sendMsg(String name, Serializable msg){
+        try{
+            sendMessage(name, msg);
+        }
+        catch (IOException IOE){
+            //Todo: leader isn't receiving me D:
         }
     }
 }

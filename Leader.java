@@ -1,5 +1,6 @@
 package EHI1VSo_1_KillerBytes;
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import robocode.MessageEvent;
 import robocode.ScannedRobotEvent;
 import robocode.TeamRobot;
@@ -20,6 +21,7 @@ public class Leader extends KillerByte {
 
     public void run(){
         allyStats = new AllyStatistics("EHI1VSo_1_KillerBytes.Leader");
+        allyStats.addAlly(this);
         setAdjustGunForRobotTurn(true);
         setAdjustRadarForGunTurn(true);
         setAdjustRadarForRobotTurn(true);
@@ -30,6 +32,7 @@ public class Leader extends KillerByte {
             super.goCrazy();
         }
     }
+
     //Leader has no specific tasks, because another robot should be able to take over the position
     public void onScannedRobot(ScannedRobotEvent TargetTank){
         super.chase(TargetTank);
@@ -42,10 +45,10 @@ public class Leader extends KillerByte {
             System.out.println("Is ally data!");
             if (!(allyStats).getAllies().containsKey(e.getSender())) {
                 System.out.println("He's not registered yet!");
-                allyStats.addAlly((TeamRobot) e.getMessage());
+                allyStats.addAlly((KillerByte) e.getMessage());
             } else {
                 System.out.println("He's registered already! Updating..");
-                allyStats.updateAlly((TeamRobot) e.getMessage());
+                allyStats.updateAlly((KillerByte) e.getMessage());
             }
         } else if (e.getMessage() instanceof EnemyBot) {
             System.out.println("Is enemy data!");
