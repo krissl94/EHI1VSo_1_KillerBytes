@@ -4,11 +4,13 @@ import robocode.MessageEvent;
 import robocode.ScannedRobotEvent;
 import robocode.TeamRobot;
 import robocode.TurnCompleteCondition;
+import robocode.util.Utils;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Random;
 
+import static robocode.util.Utils.normalAbsoluteAngle;
 import static robocode.util.Utils.normalRelativeAngleDegrees;
 
 /**
@@ -136,6 +138,49 @@ public class KillerByte extends TeamRobot implements Serializable {
 
     public void moveTo(double x, double y){
         //TODO: X and Y are coordinates the robot should drive to
+
+        //TODO: Calculate which way to drive
+        Double target = getAngle(x, y);
+        System.out.println("Current "+ getHeading());
+        System.out.println("Target " + target);
+        System.out.println("Moving" +( getHeading() - target));
+
+        if(getTurnRemaining() == 0) {
+            setTurnRight(getHeading() - target);
+        }
+        execute();
+    }
+
+    private double getAngle(double lat2, double lon2){
+//        double diffX = (x - getX());
+//        double diffY = (y - getY());
+//        System.out.println("Bearing " + Math.atan2(Math.cos(getX())*Math.sin(x)-Math.sin(getX())*Math.cos(x)*Math.cos(y-getY()), Math.sin(y-getY())*Math.cos(y)));
+//        return Math.atan2(diffY, diffX) * 180 / Math.PI;
+
+        double lon1 = getY();
+        double lat1 = getX();
+
+        double longitude1 = lon1;
+        double longitude2 = lon2;
+        double latitude1 = Math.toRadians(lat1);
+        double latitude2 = Math.toRadians(lat2);
+        double longDiff= Math.toRadians(longitude2-longitude1);
+        double y= Math.sin(longDiff)*Math.cos(latitude2);
+        double x=Math.cos(latitude1)*Math.sin(latitude2)-Math.sin(latitude1)*Math.cos(latitude2)*Math.cos(longDiff);
+
+        return (Math.toDegrees(Math.atan2(y, x))+360)%360;
+    }
+
+    public void moveWithBackAsFront(double distance, double bearing) {
+        double angle = Utils.normalRelativeAngle(bearing - getHeadingRadians());
+        double turnAngle = Math.atan(Math.tan(angle));
+        setTurnRightRadians(turnAngle);
+        int direction = angle == turnAngle ? 1 : -1;
+        setAhead(distance * direction);
+//        turnRightRadians(e.getBearingRadians());
+//        setAhead(enemyDistance);
+//        fire(2);
+
     }
 
     public void sendMessage(){
