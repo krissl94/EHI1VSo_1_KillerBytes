@@ -4,8 +4,10 @@ import robocode.MessageEvent;
 import robocode.ScannedRobotEvent;
 import robocode.TeamRobot;
 //TODO Delete in final
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by kris on 9-3-16.
@@ -13,10 +15,13 @@ import java.util.ArrayList;
 public class Leader extends KillerByte {
     String targetName;
     Boolean isLeader = true;
-    AllyStatistics allyStats = new AllyStatistics(this.getName());
+    AllyStatistics allyStats;
     EnemyStatistics enemyStats = new EnemyStatistics();
 
     public void run(){
+        // Fixed error at allyStats
+        if(allyStats == null) this.allyStats = new AllyStatistics(this.getName());
+
         setAdjustGunForRobotTurn(true);
         setAdjustRadarForGunTurn(true);
         setAdjustRadarForRobotTurn(true);
@@ -34,7 +39,7 @@ public class Leader extends KillerByte {
 
     public void onMessageReceived(MessageEvent e){
         //TODO: Check if it's an enemy object or an ally object
-        System.out.println("i received a message from "+ e.getSender());
+        System.out.println("i received a message from " + e.getSender());
         if(e.getMessage() instanceof TeamRobot){
             System.out.println("Is ally data!");
             if (!(allyStats).getAllies().containsKey(e.getSender())) {
@@ -65,9 +70,6 @@ public class Leader extends KillerByte {
     //TODO Delete in final
     public void drawDebug(Graphics2D g){
         // Draw scan circles
-        String[] teamMates = getTeammates();
-
-
         //Draw scan circle on self
         g.setColor(Color.green);
         g.drawOval((int) this.getX() - 600, (int) this.getY() - 600, 1200, 1200);
@@ -79,9 +81,19 @@ public class Leader extends KillerByte {
         g.drawString("ScanRange",(int)this.getX()+600,(int)this.getY());
 
 
-        for(String mate : teamMates){
+        // Draw square at last known enemy position, also put the co-ordinates in text above.
+        for(Map.Entry<String,EnemyBot> entry: enemyStats.getEnemies().entrySet())
+        {
+            EnemyBot enemy = entry.getValue();
 
+            for(int[] position:enemy.getRecordedPositions()){
+                g.setColor(Color.CYAN);
+                g.drawRect(position[0], position[1], 10, 10);
+                // display text; X,Y
+                g.drawString(String.valueOf(position[0])+","+String.valueOf(position[1]),position[0],position[1]-10);
+                // display text; bot name;
+                g.drawString(entry.getKey(),position[0]-(entry.getKey().length()),position[1]+10);
+            }
         }
-
     }
 }
