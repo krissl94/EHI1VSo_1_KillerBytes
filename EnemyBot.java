@@ -11,7 +11,6 @@ import java.util.ArrayList;
  */
 public class EnemyBot {
     private String name;
-    //test
     private double firstRecordedHealth;
     private double lastRecordedHealth;
     private String role;
