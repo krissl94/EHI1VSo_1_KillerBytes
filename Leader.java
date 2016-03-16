@@ -88,9 +88,18 @@ public class Leader extends KillerByte {
         for(Map.Entry<String,EnemyBot> entry: enemyStats.getEnemies().entrySet())
         {
             EnemyBot enemy = entry.getValue();
+            ArrayList<int[]> positions = enemy.getRecordedPositions();
 
-            for(int[] position:enemy.getRecordedPositions()){
-                g.setColor(Color.CYAN);
+            for(int[] position:positions){
+
+                // change color of square to red if it's the last entry
+                if(position == positions.get(positions.size())){
+                    g.setColor(Color.RED);
+                }
+                else{
+                    g.setColor(Color.CYAN);
+                }
+
                 g.drawRect(position[0], position[1], 10, 10);
                 // display text; X,Y
                 g.drawString(String.valueOf(position[0])+","+String.valueOf(position[1]),position[0],position[1]-10);
