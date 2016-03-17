@@ -90,12 +90,12 @@ public class KillerByte extends TeamRobot implements Serializable {
 
             if(targetTank.getDistance() < 140){
                 if(targetTank.getDistance() > 120){
-                    fire(targetTank, 1.5);
+                    setFire(targetTank, 1.5);
                 } else if (targetTank.getDistance() > 100) {
-                    fire(targetTank, 2);
+                    setFire(targetTank, 2);
                 }
                 else {
-                    fire(targetTank, 3);
+                    setFire(targetTank, 3);
                 }
             }
         }
@@ -133,11 +133,11 @@ public class KillerByte extends TeamRobot implements Serializable {
         //fire(2);
     }
 
-    public void fire(ScannedRobotEvent target, double power){
+    public void setFire(ScannedRobotEvent target, double power){
         //TODO: Check if an ally is in the way.
         //TODO: If an ally is in the way and his energy is low, tell him to move
         if(!target.getName().startsWith("EHI1VSo_1_KillerBytes")) {
-            fire(power);
+            setFire(power);
         }
     }
 
