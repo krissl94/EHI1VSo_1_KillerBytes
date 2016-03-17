@@ -152,26 +152,42 @@ public class KillerByte extends TeamRobot implements Serializable {
         System.out.println("Angle = " + target);
         //setTurnRight(getHeading() - target);
 
-        double headingRight = target - getHeading();
-        double headingLeft = target + getHeading();
+        System.out.println("My heading = " + getHeading());
+        System.out.println();
+
         double remainingDistance = Math.sin(Math.toRadians(target)) / (getX() - x);
 
-        if (target < 0) {
-            setTurnRight(headingRight);
-            //turnRight(headingRight);
-            setAhead(100);
+        double H;
+        double T;
+
+        if (getHeading() > 0 && target  <0 ) {
+            H = 360 - getHeading();
+            T = target*-1;
+            setTurnRight(H-T);
+            System.out.println("1");
+
+        } else if (getHeading() > 0 && target > 0 ){
+            H = 180 - getHeading();
+            T = 180 - target;
+            setTurnRight(H+T);
+            System.out.println("2");
+
+        } else if ( getHeading() < 0 && target <0 ){
+            H = 180 + getHeading();
+            T = 180 + target;
+            setTurnLeft(H+T);
+            System.out.println("3");
+
+        } else if(getHeading() < 0 && target > 0) {
+            H = 180 + getHeading();
+            T = 180 - target;
+            setTurnLeft(H-T);
+            System.out.println("4");
+
         } else {
-            setTurnLeft(headingLeft);
-            //turnLeft(headingLeft *-1);
-            setAhead(100);
+            System.out.println("Something went wrong");
         }
 
-
-
-
-
-
-        execute();
     }
 
     /**
@@ -280,7 +296,7 @@ public class KillerByte extends TeamRobot implements Serializable {
         //Leader receives the following messages:
         //  - Ally stats
         //  - Enemy stats
-        System.out.println("i received a message from "+ e.getSender());
+        System.out.println("I received a message from "+ e.getSender());
         if(e.getMessage() instanceof KillerByte){
             System.out.println("Is ally data!");
             if (!(allyStats.getAllies().containsKey(e.getSender()))) {
