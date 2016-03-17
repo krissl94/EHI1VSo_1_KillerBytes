@@ -10,6 +10,16 @@ public class EnemyStatistics implements Serializable{
     private boolean leaderAlive;
     private int droidsAlive;
     private int robotsAlive;
+    private String targetName;
+
+    public String getTargetName() {
+        return targetName;
+    }
+
+    public void setTargetName(String targetName) {
+        this.targetName = targetName;
+    }
+
     private Map<String, EnemyBot> enemies;
 
     public EnemyStatistics() {

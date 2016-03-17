@@ -126,6 +126,10 @@ public class KillerByte extends TeamRobot implements Serializable {
         System.out.println("Enemy " + e.getName() +" X = " + enemyX);
         System.out.println("Enemy " + e.getName() +"Y = " + enemyY);
 
+        // Follow enemy robot & shoot
+        turnRightRadians(e.getBearingRadians());
+        setAhead(enemyDistance);
+        fire(2);
     }
 
     public void fire(ScannedRobotEvent target, double power){
@@ -139,8 +143,31 @@ public class KillerByte extends TeamRobot implements Serializable {
     public void moveTo(double x, double y){
         //TODO: X and Y are coordinates the robot should drive to
         //TODO: Calculate which way to drive
+        double myX = getX();
+        System.out.println("My X = " + myX);
+        double myY = getY();
+        System.out.println("My Y = " + myY);
+
         Double target = getAngle(x, y);
+        System.out.println("Angle = " + target);
         setTurnRight(getHeading() - target);
+
+        double richting = getHeading() - target;
+        double remainingDistance = Math.sin(Math.toRadians(target)) / (getX() - x);
+
+        if (richting < 0) {
+            turnRight(richting);
+            setAhead(remainingDistance);
+        } else {
+            turnLeft(richting);
+            setAhead(remainingDistance);
+        }
+
+
+
+
+
+
         execute();
     }
 

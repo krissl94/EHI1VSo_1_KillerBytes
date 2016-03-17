@@ -14,7 +14,7 @@ public class EnemyBot {
     private double firstRecordedHealth;
     private double lastRecordedHealth;
     private String role;
-    private ArrayList<int[]> recordedPositions;
+    private ArrayList<double[]> recordedPositions;
 
     public EnemyBot(ScannedRobotEvent TargetTank){//String name, int firstRecordedHealth, int lastRecordedHealth, String role, int x, int y) {
         this.name = TargetTank.getName();
@@ -53,7 +53,7 @@ public class EnemyBot {
         this.role = role;
     }
 
-    public ArrayList<int[]> getRecordedPositions() {
+    public ArrayList<double[]> getRecordedPositions() {
         return recordedPositions;
     }
 
@@ -73,8 +73,12 @@ public class EnemyBot {
         }
     }
 
-    private int[] determinePosition(ScannedRobotEvent targetTank){
+    private double[] determinePosition(ScannedRobotEvent targetTank){
         //Coordinaten uitrekenen adhv eigen positie en afstand enzo, mooi klusje voor nicky
-        return new int[]{1,1};
+        return new double[]{1,1};
+    }
+
+    public double[] getLastRecordedPosition(){
+        return this.recordedPositions.get(this.recordedPositions.size() - 1);
     }
 }
