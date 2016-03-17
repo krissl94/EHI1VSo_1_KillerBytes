@@ -32,17 +32,21 @@ public class KillerByte extends TeamRobot implements Serializable {
      */
     public void goCrazy(){
         Random rand = new Random();
-        setTurnRadarRight(3);
+        setTurnRadarRight(360);
 
         if(rand.nextInt(2) == 0){
             //Go backward
             setBack(100);
+            setTurnRadarRight(360);
             setTurnRight(40);
         }else{
             //Go forward
             setAhead(100);
+            setTurnRadarRight(360);
+
             setTurnRight(50);
         }
+        setTurnRadarRight(360);
 
         execute();
     }
@@ -102,7 +106,6 @@ public class KillerByte extends TeamRobot implements Serializable {
             }
             System.out.println("Ally " + targetTank.getName() + " is in the way!");
         }
-        execute();
     }
 
     public void calculateCoordinates(ScannedRobotEvent e){
@@ -288,15 +291,15 @@ public class KillerByte extends TeamRobot implements Serializable {
                 allyStats.updateAlly((KillerByte) e.getMessage());
             }
             //Allies were updated, so i should broadcast the new object
-//            broadcastStats(allyStats);
+            broadcastStats(allyStats);
             } else if (e.getMessage() instanceof ScannedRobotEvent) {
             System.out.println("Is enemy data!");
-            if (!(enemyStats).getEnemies().containsKey(((ScannedRobotEvent) e.getMessage()).getName())) {
+            if (!(enemyStats).getEnemies().containsKey(((EnemyBot) e.getMessage()).getName())) {
                 System.out.println("This enemy's not registered yet!");
-                enemyStats.addEnemyFromEvent((ScannedRobotEvent) e.getMessage());
+                enemyStats.addEnemy((EnemyBot) e.getMessage());
             } else {
                 System.out.println("This enemy is registered, but i need to update him");
-                enemyStats.updateEnemyFromEvent((ScannedRobotEvent) e.getMessage());
+                enemyStats.updateEnemy((EnemyBot) e.getMessage());
             }
             //Enemies were updated, so i should broadcast the new object
             broadcastStats(enemyStats);

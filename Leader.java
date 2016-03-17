@@ -34,13 +34,13 @@ public class Leader extends KillerByte {
             Random random = new Random();
             this.setColors(Color.getHSBColor(random.nextFloat(),random.nextFloat(),random.nextFloat()),Color.getHSBColor(random.nextFloat(),random.nextFloat(),random.nextFloat()),Color.getHSBColor(random.nextFloat(),random.nextFloat(),random.nextFloat()));
             super.goCrazy();
+            execute();
         }
     }
 
     //Leader has no specific tasks, because another robot should be able to take over the position
     public void onScannedRobot(ScannedRobotEvent TargetTank){
         super.chase(TargetTank);
-        TargetTank.getBearing();
     }
 
     public void onMessageReceived(MessageEvent e){
