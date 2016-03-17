@@ -5,6 +5,7 @@ import robocode.ScannedRobotEvent;
 import robocode.TeamRobot;
 import robocode.TurnCompleteCondition;
 import robocode.util.Utils;
+import sun.plugin2.message.Message;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -20,6 +21,7 @@ public class KillerByte extends TeamRobot implements Serializable {
     public String name;
     public AllyStatistics allyStats = null;
     public EnemyStatistics enemyStats;
+    Boolean isLeader = false;
 
     public void smartShooting(){
 
@@ -184,6 +186,11 @@ public class KillerByte extends TeamRobot implements Serializable {
         return normalRelativeAngleDegrees(Math.toDegrees(Math.atan2(lon2-lon1, lat2-lat1)));
     }
 
+    /**
+     * Not implemented yet, but might be a nice one
+     * @param distance
+     * @param bearing
+     */
     public void moveWithBackAsFront(double distance, double bearing) {
         double angle = Utils.normalRelativeAngle(bearing - getHeadingRadians());
         double turnAngle = Math.atan(Math.tan(angle));
@@ -196,16 +203,6 @@ public class KillerByte extends TeamRobot implements Serializable {
 
     }
 
-    public void sendMessage(){
-        //TODO: Find robot with leader role and send him the info
-    }
-
-    public void processData(){
-        //TODO: Leader Robot processes the data and broadcasts it
-
-        broadcastStats(null);
-    }
-
     public void broadcastStats(Serializable stats){
         //TODO: Broadcast data
         try{
@@ -216,7 +213,6 @@ public class KillerByte extends TeamRobot implements Serializable {
 
         }
     }
-
     public void reportTo(String leader){
         try{
             sendMessage(leader, this);
@@ -224,26 +220,88 @@ public class KillerByte extends TeamRobot implements Serializable {
 
         }
     }
-
     public void messageReceived(MessageEvent e){
-        System.out.println("i received a message from "+ e.getSender());
-        if(e.getMessage() instanceof AllyStatistics){
-            allyStats = (AllyStatistics)e.getMessage();
-
-            System.out.println("Is an allystats thingy");
-            if (!((AllyStatistics) e.getMessage()).getAllies().containsKey(this.getName())) {
-                //This is only going to happen once. It's the leader requesting me to register.
-                System.out.println("I'm not registered yet");
-                sendMsg(((AllyStatistics) e.getMessage()).getLeader(), this);
-            }
+        if(!isLeader){
+            robotProcessData(e);
         }
+        else {
+            leaderProcessData(e);
+        }
+
     }
+
+    /**
+     * Custom sendMessage that handles try catch itself, keeping code clean
+     * @param name
+     * @param msg
+     */
     public void sendMsg(String name, Serializable msg){
         try{
             sendMessage(name, msg);
         }
         catch (IOException IOE){
             //Todo: leader isn't receiving me D:
+        }
+    }
+
+    /**
+     * Robots process data
+     * @param e
+     * e can be allyStats, enemyStats (optionally: [or a request to register to the Leader]).
+     */
+    private void robotProcessData(MessageEvent e){
+        //Robots and droids that aren't leaders dont do much with received messages, just register it to their own memory
+        if(e.getMessage() instanceof AllyStatistics){
+            this.allyStats = (AllyStatistics)e.getMessage();
+            System.out.println("Is an allystats thing");
+            if (!((AllyStatistics) e.getMessage()).getAllies().containsKey(this.getName())) {
+                //This is only going to happen once. It's the leader requesting me to register.
+                System.out.println("I'm not registered yet");
+                sendMsg(((AllyStatistics) e.getMessage()).getLeader(), this);
+            }
+        } else if(e.getMessage() instanceof EnemyStatistics){
+            System.out.println("Leader sent me new info! D:");
+            //Lots of shit is gonna go down.
+            //Recalculate route
+            //Check if there's a new target in town
+            //Perform some general checks.
+            this.enemyStats = (EnemyStatistics) e.getMessage();
+        }
+    }
+
+    /**
+     * Leader processes the data of a message
+     *
+     * @param e
+     * e can either be a friendly bot, or an enemy
+     */
+    private void leaderProcessData(MessageEvent e){
+        //Leader receives the following messages:
+        //  - Ally stats
+        //  - Enemy stats
+        System.out.println("i received a message from "+ e.getSender());
+        if(e.getMessage() instanceof KillerByte){
+            System.out.println("Is ally data!");
+            if (!(allyStats).getAllies().containsKey(e.getSender())) {
+                System.out.println("He's not registered yet!");
+                allyStats.addAlly((KillerByte) e.getMessage());
+            } else {
+                System.out.println("He's registered already! Updating..");
+                allyStats.updateAlly((KillerByte) e.getMessage());
+            }
+            //Allies were updated, so i should broadcast the new object
+            broadcastStats(allyStats);
+        } else if (e.getMessage() instanceof EnemyBot) {
+            System.out.println("Is enemy data!");
+            if (!(enemyStats).getEnemies().containsKey(((EnemyBot) e.getMessage()).getName())) {
+                System.out.println("This enemy's not registered yet!");
+                enemyStats.addEnemy((EnemyBot) e.getMessage());
+            } else {
+                System.out.println("This enemy is registered, but i need to update him");
+                enemyStats.updateEnemy((EnemyBot) e.getMessage());
+            }
+            //Enemies were updated, so i should broadcast the new object
+            broadcastStats(enemyStats);
         }
     }
 }
