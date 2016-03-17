@@ -46,7 +46,6 @@ public class KillerByte extends TeamRobot implements Serializable {
 
             setTurnRight(50);
         }
-        waitFor(new TurnCompleteCondition(this));
         setTurnRadarRight(3);
 
         execute();
