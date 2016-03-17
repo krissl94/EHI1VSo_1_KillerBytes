@@ -21,7 +21,7 @@ public class RobotTwo extends KillerByte implements Serializable{
             //TODO: Every tick, a robot reports itself to the leader
             if(allyStats != null)
                 reportTo(allyStats.getLeader());
-            scan();
+            setTurnRadarRight(360);
             execute();
         }
     }

@@ -32,7 +32,7 @@ public class KillerByte extends TeamRobot implements Serializable {
      */
     public void goCrazy(){
         Random rand = new Random();
-        setTurnRadarRight(3);
+        setTurnRadarRight(360);
 
         if(rand.nextInt(2) == 0){
             //Go backward
@@ -46,7 +46,7 @@ public class KillerByte extends TeamRobot implements Serializable {
 
             setTurnRight(50);
         }
-        setTurnRadarRight(3);
+        setTurnRadarRight(360);
 
         execute();
     }
@@ -106,7 +106,6 @@ public class KillerByte extends TeamRobot implements Serializable {
             }
             System.out.println("Ally " + targetTank.getName() + " is in the way!");
         }
-        execute();
     }
 
     public void calculateCoordinates(ScannedRobotEvent e){
