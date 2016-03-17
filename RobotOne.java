@@ -14,7 +14,6 @@ import static robocode.util.Utils.normalRelativeAngleDegrees;
  * Created by kris on 9-3-16.
  */
 public class RobotOne extends KillerByte implements Serializable {
-    Boolean isLeader = false;
     Boolean running = false;
 
     public void run(){

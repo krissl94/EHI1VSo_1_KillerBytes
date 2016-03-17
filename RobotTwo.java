@@ -12,7 +12,6 @@ import java.io.Serializable;
  */
 public class RobotTwo extends KillerByte implements Serializable{
     private EnemyStatistics enemyStats;
-    Boolean isLeader = false;
     Boolean running = false;
     public void run(){
         name = getName();
@@ -43,7 +42,6 @@ public class RobotTwo extends KillerByte implements Serializable{
     }
     public void onMessageReceived(MessageEvent e){
         messageReceived(e);
-
     }
 
     public void sendMsg(String name, Serializable msg){

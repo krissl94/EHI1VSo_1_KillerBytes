@@ -69,11 +69,6 @@ public class EnemyStatistics implements Serializable{
         }
     }
 
-
-//    public Serializable serialize(){
-
-//    }
-
     public EnemyStatistics deSerialize(Serializable serializedStats){
         return null;
     }
