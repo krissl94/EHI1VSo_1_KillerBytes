@@ -4,6 +4,7 @@ import robocode.TeamRobot;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class EnemyStatistics implements Serializable{
@@ -71,5 +72,17 @@ public class EnemyStatistics implements Serializable{
 
     public EnemyStatistics deSerialize(Serializable serializedStats){
         return null;
+    }
+
+    public String toString(){
+        String toReturn = "Enemy leader is alive " + leaderAlive + " and they have " + robotsAlive +" living robots" + " and " + droidsAlive + "living droids";
+        Iterator it = enemies.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            toReturn += " Robot " + pair.getKey() + ((EnemyBot)pair.getValue()).toString();
+//            System.out.println(pair.getKey() + " = " + pair.getValue());
+            it.remove(); // avoids a ConcurrentModificationException
+        }
+        return toReturn;
     }
 }

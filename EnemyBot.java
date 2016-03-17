@@ -81,4 +81,8 @@ public class EnemyBot {
     public double[] getLastRecordedPosition(){
         return this.recordedPositions.get(this.recordedPositions.size() - 1);
     }
+
+    public String toString(){
+        return "Robot " + name + " was first recorded with" + firstRecordedHealth + "energy and is probably a " + role + ". He was last seen at " + recordedPositions.get(recordedPositions.size() -1 )[0] + "," + recordedPositions.get(recordedPositions.size() -1 )[0] + " his energy is " + lastRecordedHealth;
+    }
 }

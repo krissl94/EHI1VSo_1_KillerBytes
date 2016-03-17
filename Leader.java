@@ -33,7 +33,7 @@ public class Leader extends KillerByte {
             // SET RANDOM COLORS
             Random random = new Random();
             this.setColors(Color.getHSBColor(random.nextFloat(),random.nextFloat(),random.nextFloat()),Color.getHSBColor(random.nextFloat(),random.nextFloat(),random.nextFloat()),Color.getHSBColor(random.nextFloat(),random.nextFloat(),random.nextFloat()));
-
+            System.out.println(enemyStats.toString());
             super.goCrazy();
         }
     }
@@ -62,7 +62,6 @@ public class Leader extends KillerByte {
     public void drawDebug(Graphics2D g){
         // Draw scan circles
         String[] teamMates = getTeammates();
-
 
         //Draw scan circle on self
         g.setColor(Color.green);
