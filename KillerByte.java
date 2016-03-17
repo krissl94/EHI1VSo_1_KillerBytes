@@ -285,7 +285,7 @@ public class KillerByte extends TeamRobot implements Serializable {
         System.out.println("i received a message from "+ e.getSender());
         if(e.getMessage() instanceof KillerByte){
             System.out.println("Is ally data!");
-            if (!(allyStats).getAllies().containsKey(e.getSender())) {
+            if (!(allyStats.getAllies().containsKey(e.getSender()))) {
                 System.out.println("He's not registered yet!");
                 allyStats.addAlly((KillerByte) e.getMessage());
             } else {
@@ -294,7 +294,7 @@ public class KillerByte extends TeamRobot implements Serializable {
             }
             //Allies were updated, so i should broadcast the new object
             broadcastStats(allyStats);
-        } else if (e.getMessage() instanceof EnemyBot) {
+            } else if (e.getMessage() instanceof ScannedRobotEvent) {
             System.out.println("Is enemy data!");
             if (!(enemyStats).getEnemies().containsKey(((EnemyBot) e.getMessage()).getName())) {
                 System.out.println("This enemy's not registered yet!");

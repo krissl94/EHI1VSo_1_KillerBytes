@@ -83,6 +83,10 @@ public class EnemyStatistics implements Serializable{
 //            System.out.println(pair.getKey() + " = " + pair.getValue());
             it.remove(); // avoids a ConcurrentModificationException
         }
+        for (int i = 0; i < enemies.size(); i++) {
+            toReturn += " Robot " + enemies.get(i).toString();
+
+        }
         return toReturn;
     }
 }

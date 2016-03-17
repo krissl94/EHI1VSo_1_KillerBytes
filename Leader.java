@@ -16,11 +16,10 @@ import java.util.Random;
  */
 public class Leader extends KillerByte {
     String targetName;
-    Boolean isLeader = true;
-    AllyStatistics allyStats;
     EnemyStatistics enemyStats = new EnemyStatistics();
 
     public void run(){
+        isLeader = true;
         allyStats = new AllyStatistics("EHI1VSo_1_KillerBytes.Leader");
         allyStats.addAlly(this);
         setAdjustGunForRobotTurn(true);
@@ -33,7 +32,6 @@ public class Leader extends KillerByte {
             // SET RANDOM COLORS
             Random random = new Random();
             this.setColors(Color.getHSBColor(random.nextFloat(),random.nextFloat(),random.nextFloat()),Color.getHSBColor(random.nextFloat(),random.nextFloat(),random.nextFloat()),Color.getHSBColor(random.nextFloat(),random.nextFloat(),random.nextFloat()));
-            System.out.println(enemyStats.toString());
             super.goCrazy();
         }
     }
@@ -47,9 +45,7 @@ public class Leader extends KillerByte {
     public void onMessageReceived(MessageEvent e){
         //TODO: Check if it's an enemy object or an ally object
         // functie : isFriendly(name), ez
-
-
-
+        messageReceived(e);
     }
 
 
