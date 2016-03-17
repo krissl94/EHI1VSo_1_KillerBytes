@@ -11,17 +11,19 @@ import java.io.Serializable;
  * Created by kris on 9-3-16.
  */
 public class RobotTwo extends KillerByte implements Serializable{
-    private EnemyStatistics enemyStats;
     Boolean running = false;
     public void run(){
         name = getName();
+        setAdjustGunForRobotTurn(true);
+        setAdjustRadarForGunTurn(true);
+        setAdjustRadarForRobotTurn(true);
         running = true;
         enemyStats = new EnemyStatistics();
         while(true){
             //TODO: Every tick, a robot reports itself to the leader
             if(allyStats != null)
                 reportTo(allyStats.getLeader());
-            scan();
+            setTurnRadarRight(360);
             execute();
         }
     }

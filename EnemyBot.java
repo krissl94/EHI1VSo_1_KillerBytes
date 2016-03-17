@@ -2,6 +2,7 @@ package EHI1VSo_1_KillerBytes;
 
 import robocode.ScannedRobotEvent;
 
+import java.io.Serializable;
 import java.lang.annotation.Target;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 /**
  * Created by kris on 9-3-16.
  */
-public class EnemyBot {
+public class EnemyBot implements Serializable{
     private String name;
     private double firstRecordedHealth;
     private double lastRecordedHealth;

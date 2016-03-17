@@ -16,7 +16,6 @@ import java.util.Random;
  */
 public class Leader extends KillerByte {
     String targetName;
-    EnemyStatistics enemyStats = new EnemyStatistics();
 
     public void run(){
         isLeader = true;
@@ -25,11 +24,13 @@ public class Leader extends KillerByte {
         setAdjustGunForRobotTurn(true);
         setAdjustRadarForGunTurn(true);
         setAdjustRadarForRobotTurn(true);
+        enemyStats = new EnemyStatistics();
 
         //TODO: Broadcast an initialized object
         broadcastStats(allyStats);
         while(true){
             // SET RANDOM COLORS
+            System.out.println(enemyStats.toString());
             Random random = new Random();
             this.setColors(Color.getHSBColor(random.nextFloat(),random.nextFloat(),random.nextFloat()),Color.getHSBColor(random.nextFloat(),random.nextFloat(),random.nextFloat()),Color.getHSBColor(random.nextFloat(),random.nextFloat(),random.nextFloat()));
             super.goCrazy();

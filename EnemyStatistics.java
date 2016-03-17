@@ -1,5 +1,6 @@
 package EHI1VSo_1_KillerBytes;
 
+import robocode.ScannedRobotEvent;
 import robocode.TeamRobot;
 
 import java.io.Serializable;
@@ -54,10 +55,17 @@ public class EnemyStatistics implements Serializable{
     public void setEnemies(Map<String, EnemyBot> enemies) {
         this.enemies = enemies;
     }
+    public void addEnemyFromEvent(ScannedRobotEvent e){
+        addEnemy(new EnemyBot(e));
+    }
     public void addEnemy(EnemyBot enemy){
         this.enemies.put(enemy.getName(), enemy);
     }
+    public void updateEnemyFromEvent(ScannedRobotEvent e){
+        updateEnemy(new EnemyBot(e));
+    }
     public void updateEnemy(EnemyBot enemy){
+        //TODO: Update instead of Replace
         this.enemies.replace(enemy.getName(), enemy);
     }
     public void enemyDied(EnemyBot enemy){
