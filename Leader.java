@@ -96,9 +96,9 @@ public class Leader extends KillerByte {
         // Draw square at last known enemy position, also put the co-ordinates in text above.
         for(Map.Entry<String,EnemyBot> entry: enemyStats.getEnemies().entrySet()) {
             EnemyBot enemy = entry.getValue();
-            ArrayList<int[]> positions = enemy.getRecordedPositions();
+            ArrayList<double[]> positions = enemy.getRecordedPositions();
 
-            for (int[] position : positions) {
+            for (double[] position : positions) {
 
                 // change color of square to red if it's the last entry
                 if (position == positions.get(positions.size())) {
@@ -107,11 +107,11 @@ public class Leader extends KillerByte {
                 else {
                     g.setColor(Color.CYAN);
                 }
-                g.drawRect(position[0], position[1], 10, 10);
+                g.drawRect((int)position[0], (int)position[1], 10, 10);
                 // display text; X,Y
-                g.drawString(String.valueOf(position[0]) + "," + String.valueOf(position[1]), position[0], position[1] - 10);
+                g.drawString(String.valueOf(position[0]) + "," + String.valueOf(position[1]), (int)position[0], (int)position[1] - 10);
                 // display text; bot name;
-                g.drawString(entry.getKey(), position[0] - (entry.getKey().length()), position[1] + 10);
+                g.drawString(entry.getKey(), (int)(position[0] - (entry.getKey().length())), (int)(position[1] + 10));
             }
         }
     }

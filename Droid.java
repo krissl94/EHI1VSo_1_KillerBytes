@@ -9,7 +9,8 @@ public class Droid extends KillerByte implements robocode.Droid {
     //Doei
     public void run(){
         while(true){
-            moveTo( enemyStats.getEnemies().get(enemyStats.getTargetName()).getRecordedPositions().get(0)[0], enemyStats.getEnemies().get(enemyStats.getTargetName()).getRecordedPositions().get(0)[1]);
+            moveTo(10,10);
+            //enemyStats.getEnemies().get(enemyStats.getTargetName()).getRecordedPositions().get(0)[0], enemyStats.getEnemies().get(enemyStats.getTargetName()).getRecordedPositions().get(0)[1]
         }
     }
 }
