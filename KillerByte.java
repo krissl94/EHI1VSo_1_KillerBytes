@@ -150,8 +150,6 @@ public class KillerByte extends TeamRobot implements Serializable {
 
         Double target = getAngle(x, y);
         System.out.println("Angle = " + target);
-        //setTurnRight(getHeading() - target);
-
         System.out.println("My heading = " + getHeading());
 
         //moveTo(distanceToEnemy)
@@ -161,15 +159,19 @@ public class KillerByte extends TeamRobot implements Serializable {
 
         if ((Math.abs(getHeading()) + Math.abs(target) < 180) && target < 0) {
             setTurnLeft(Math.abs(getHeading()) + Math.abs(target));
+            System.out.println("1. Turns Left");
             setAhead(distanceToEnemy);
         } else if ((Math.abs(getHeading()) + Math.abs(target) < 180) && target > 0) {
             setTurnRight(Math.abs(getHeading()) + Math.abs(target));
+            System.out.println("2. Turns Right");
             setAhead(distanceToEnemy);
         } else if ((Math.abs(getHeading()) + Math.abs(target) > 180 && target > 0)) {
             setTurnLeft((180 - Math.abs(getHeading()) + (180 - Math.abs(target))));
+            System.out.println("3. Turns Left");
             setAhead(distanceToEnemy);
         } else if (Math.abs(getHeading()) + Math.abs(target) > 180 && target < 0) {
             setTurnRight((180 - Math.abs(getHeading()) + (180 - Math.abs(target))));
+            System.out.println("4. Turns Left");
             setAhead(distanceToEnemy);
         } else {
             System.out.println("Something went wrong");
@@ -182,7 +184,7 @@ public class KillerByte extends TeamRobot implements Serializable {
             3. De droid krijgt nieuwe informatie waar precies hetzelfde in staat als in de oude informatie
             4. De droid verwerkt deze informatie en rijdt zo zijn doel mis.
 
-            Het updaten werkt nog niet goed?
+            Het updaten werkt nog niet goed? Of zie ik 't verkeerd...
         */
 
 
