@@ -153,40 +153,39 @@ public class KillerByte extends TeamRobot implements Serializable {
         //setTurnRight(getHeading() - target);
 
         System.out.println("My heading = " + getHeading());
-        System.out.println();
 
-        double remainingDistance = Math.sin(Math.toRadians(target)) / (getX() - x);
+        //moveTo(distanceToEnemy)
+        double distanceToEnemyX = Math.abs(myX -x);
+        double distanceToEnemyY = Math.abs(myY -y);
+        double distanceToEnemy = Math.sqrt((Math.pow(distanceToEnemyX, 2) + Math.pow(distanceToEnemyY, 2)));
 
-        double H;
-        double T;
-
-        if (getHeading() > 0 && target  <0 ) {
-            H = 360 - getHeading();
-            T = target*-1;
-            setTurnRight(H-T);
-            System.out.println("1");
-
-        } else if (getHeading() > 0 && target > 0 ){
-            H = 180 - getHeading();
-            T = 180 - target;
-            setTurnRight(H+T);
-            System.out.println("2");
-
-        } else if ( getHeading() < 0 && target <0 ){
-            H = 180 + getHeading();
-            T = 180 + target;
-            setTurnLeft(H+T);
-            System.out.println("3");
-
-        } else if(getHeading() < 0 && target > 0) {
-            H = 180 + getHeading();
-            T = 180 - target;
-            setTurnLeft(H-T);
-            System.out.println("4");
-
+        if ((Math.abs(getHeading()) + Math.abs(target) < 180) && target < 0) {
+            setTurnLeft(Math.abs(getHeading()) + Math.abs(target));
+            setAhead(distanceToEnemy);
+        } else if ((Math.abs(getHeading()) + Math.abs(target) < 180) && target > 0) {
+            setTurnRight(Math.abs(getHeading()) + Math.abs(target));
+            setAhead(distanceToEnemy);
+        } else if ((Math.abs(getHeading()) + Math.abs(target) > 180 && target > 0)) {
+            setTurnLeft((180 - Math.abs(getHeading()) + (180 - Math.abs(target))));
+            setAhead(distanceToEnemy);
+        } else if (Math.abs(getHeading()) + Math.abs(target) > 180 && target < 0) {
+            setTurnRight((180 - Math.abs(getHeading()) + (180 - Math.abs(target))));
+            setAhead(distanceToEnemy);
         } else {
             System.out.println("Something went wrong");
         }
+
+
+        /* Message:
+            1. De droid krijgt informatie over de X en Y waar deze naartoe moet.
+            2. De droid verwerkt deze informatie en rijdt op dat doel af.
+            3. De droid krijgt nieuwe informatie waar precies hetzelfde in staat als in de oude informatie
+            4. De droid verwerkt deze informatie en rijdt zo zijn doel mis.
+
+            Het updaten werkt nog niet goed?
+        */
+
+
 
     }
 
