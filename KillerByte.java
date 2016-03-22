@@ -150,28 +150,36 @@ public class KillerByte extends TeamRobot implements Serializable {
 
         Double target = getAngle(x, y);
         System.out.println("Angle = " + target);
-        System.out.println("My heading = " + getHeading());
+
+        double heading = 0;
+        if (getHeading() > 180) {
+            heading = (getHeading()*-1) + 180;
+            System.out.println("My heading = " + heading);
+        } else if (getHeading() < 180) {
+            heading = getHeading();
+            System.out.println("My heading = " + heading);
+        }
 
         //moveTo(distanceToEnemy)
         double distanceToEnemyX = Math.abs(myX -x);
         double distanceToEnemyY = Math.abs(myY -y);
         double distanceToEnemy = Math.sqrt((Math.pow(distanceToEnemyX, 2) + Math.pow(distanceToEnemyY, 2)));
 
-        if ((Math.abs(getHeading()) + Math.abs(target) < 180) && target < 0) {
-            setTurnLeft(Math.abs(getHeading()) + Math.abs(target));
+        if ((Math.abs(heading) + Math.abs(target) < 180) && target < 0) {
+            setTurnLeft(Math.abs(heading) + Math.abs(target));
             System.out.println("1. Turns Left");
             setAhead(distanceToEnemy);
-        } else if ((Math.abs(getHeading()) + Math.abs(target) < 180) && target > 0) {
-            setTurnRight(Math.abs(getHeading()) + Math.abs(target));
+        } else if ((Math.abs(heading) + Math.abs(target) < 180) && target > 0) {
+            setTurnRight(Math.abs(heading) + Math.abs(target));
             System.out.println("2. Turns Right");
             setAhead(distanceToEnemy);
-        } else if ((Math.abs(getHeading()) + Math.abs(target) > 180 && target > 0)) {
-            setTurnLeft((180 - Math.abs(getHeading()) + (180 - Math.abs(target))));
+        } else if ((Math.abs(heading) + Math.abs(target) > 180 && target > 0)) {
+            setTurnLeft((180 - Math.abs(heading) + (180 - Math.abs(target))));
             System.out.println("3. Turns Left");
             setAhead(distanceToEnemy);
-        } else if (Math.abs(getHeading()) + Math.abs(target) > 180 && target < 0) {
-            setTurnRight((180 - Math.abs(getHeading()) + (180 - Math.abs(target))));
-            System.out.println("4. Turns Left");
+        } else if (Math.abs(heading) + Math.abs(target) > 180 && target < 0) {
+            setTurnRight((180 - Math.abs(heading) + (180 - Math.abs(target))));
+            System.out.println("4. Turns Right");
             setAhead(distanceToEnemy);
         } else {
             System.out.println("Something went wrong");
