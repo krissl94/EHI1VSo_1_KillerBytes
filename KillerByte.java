@@ -9,6 +9,7 @@ import sun.plugin2.message.Message;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Random;
 
 import static robocode.util.Utils.normalAbsoluteAngle;
@@ -22,6 +23,8 @@ public class KillerByte extends TeamRobot implements Serializable {
     public String role;
     public AllyStatistics allyStats = null;
     public EnemyStatistics enemyStats = null;
+    public EnemyBot enemyBot;
+    int movementDirection = 1;
     Boolean isLeader = false;
 
     public void init(){
@@ -58,8 +61,19 @@ public class KillerByte extends TeamRobot implements Serializable {
      * We should be able to track every robot's energy, so we should also be able to check when a shot is fired.
      * Because everyone on the field, the entire team needs to dodge
      */
-    public void dodgeAttack(){
+    public void dodgeAttack(ScannedRobotEvent e){
+        //turn to right angle so dodging is easier
+        setTurnRight(e.getBearing()+90-30*movementDirection);
 
+        //if enemy has small energy drop assume bullet has been fired
+        double changeInEnergy = enemyBot.getFirstRecordedHealth() - enemyBot.getLastRecordedHealth();
+        if(changeInEnergy > 0 && changeInEnergy <=3){
+            //dodge the bullet
+
+            //movementDirection = -movementDirection;
+            //movementDirection is -1 now, the -1 in setAhead should have been movementDirection
+            setAhead((e.getDistance()/4+25)-1);
+        }
     }
 
     /**
@@ -143,7 +157,25 @@ public class KillerByte extends TeamRobot implements Serializable {
         }
     }
 
-    public void smartShooting(double x, double y){
+    public void smartShooting(ScannedRobotEvent e, double x, double y){
+        // Target information
+        double enemyX[] = enemyBot.getRecordedPositions().get(0);
+        double enemyY[] = enemyBot.getRecordedPositions().get(1);
+        double targetVelocity = e.getVelocity();
+        double targetHeading = e.getHeading();
+        double bulletPower = enemyBot.getFirstRecordedHealth() - enemyBot.getLastRecordedHealth();
+        double bulletVelocity = 20 - 3 * bulletPower;
+
+        // Own information
+        double myX = getX();
+        double myY = getY();
+        
+        double angularVelocityDegPerSec = 0;
+        double angularVelocityRadPerSec = Math.toRadians(angularVelocityDegPerSec);
+
+        double distanceToEnemyX = myX - enemyX[0];
+        double distanceToEnemyY = myY - enemyY[0];
+        double distance = Math.sqrt((Math.pow(distanceToEnemyX, 2) + Math.pow(distanceToEnemyY, 2)));
 
 
     }
