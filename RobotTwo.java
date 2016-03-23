@@ -35,7 +35,8 @@ public class RobotTwo extends KillerByte implements Serializable{
         System.out.println("I spotted " + TargetTank.getName());
         if(!isLeader){
             if(allyStats != null){
-                sendMsg(allyStats.getLeader(), TargetTank);
+                EnemyBot enemy = new EnemyBot(TargetTank , calculateCoordinates(TargetTank));
+                sendMsg(allyStats.getLeader(), enemy);
             }
             else {
                 //Don't do anything cus idk who to send to

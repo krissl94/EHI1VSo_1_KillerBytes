@@ -95,18 +95,16 @@ public class EnemyStatistics implements Serializable{
     }
 
     public String toString(){
-        String toReturn = "Enemy leader is alive " + leaderAlive + " and they have " + robotsAlive +" living robots" + " and " + droidsAlive + "living droids";
-        Iterator it = enemies.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            toReturn += " Robot " + pair.getKey() + ((EnemyBot)pair.getValue()).toString();
-//            System.out.println(pair.getKey() + " = " + pair.getValue());
-            it.remove(); // avoids a ConcurrentModificationException
-        }
-        for (int i = 0; i < enemies.size(); i++) {
-            toReturn += " Robot " + enemies.get(i).toString();
+        String toReturn = "/-------------------------------------/\r\n";
+        toReturn += "Enemy leader is alive " + leaderAlive + " and they have " + robotsAlive +" living robots" + " and " + droidsAlive + "living droids";
 
+        toReturn+= "\r\n++++++++++++++++++++\r\n";
+        for(Map.Entry<String,EnemyBot> entry: enemies.entrySet()) {
+            EnemyBot enemy = entry.getValue();
+            toReturn += " Robot " + enemy.toString() + "\r\n";
         }
+        toReturn+="++++++++++++++++++++\r\n";
+        toReturn+="/-------------------------------------/\r\n";
         return toReturn;
     }
 }
