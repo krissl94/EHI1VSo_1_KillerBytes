@@ -22,6 +22,8 @@ public class KillerByte extends TeamRobot implements Serializable {
     public String role;
     public AllyStatistics allyStats = null;
     public EnemyStatistics enemyStats = null;
+    public EnemyBot enemyBot;
+    int movementDirection = 1;
     Boolean isLeader = false;
 
     /**
@@ -53,8 +55,19 @@ public class KillerByte extends TeamRobot implements Serializable {
      * We should be able to track every robot's energy, so we should also be able to check when a shot is fired.
      * Because everyone on the field, the entire team needs to dodge
      */
-    public void dodgeAttack(){
+    public void dodgeAttack(ScannedRobotEvent e){
+        //turn to right angle so dodging is easier
+        setTurnRight(e.getBearing()+90-30*movementDirection);
 
+        //if enemy has small energy drop assume bullet has been fired
+        double changeInEnergy = enemyBot.getFirstRecordedHealth() - enemyBot.getLastRecordedHealth();
+        if(changeInEnergy > 0 && changeInEnergy <=3){
+            //dodge the bullet
+
+            //movementDirection = -movementDirection;
+            //movementDirection is -1 now, the -1 in setAhead should have been movementDirection
+            setAhead((e.getDistance()/4+25)-1);
+        }
     }
 
     /**
