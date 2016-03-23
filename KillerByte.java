@@ -313,7 +313,7 @@ public class KillerByte extends TeamRobot implements Serializable {
             if (!((AllyStatistics) e.getMessage()).getAllies().containsKey(this.getName())) {
                 //This is only going to happen once. It's the leader requesting me to register.
                 System.out.println("I'm not registered yet");
-                sendMsg(((AllyStatistics) e.getMessage()).getLeader(), this);
+//                sendMsg(((AllyStatistics) e.getMessage()).getLeader(), this);
             }
         } else if(e.getMessage() instanceof EnemyStatistics){
             System.out.println("Leader sent me new info! D:");

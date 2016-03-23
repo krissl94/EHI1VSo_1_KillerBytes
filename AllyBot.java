@@ -31,9 +31,9 @@ public class AllyBot implements Serializable{
     }
 
     public AllyBot(KillerByte bot) {
-        this.name = bot.getName();
+        this.name = bot.name;
         this.energy = bot.getEnergy();
-        this.role = bot.role    ;
+        this.role = bot.role;
     }
     public AllyBot(String name, double energy, String role) {
         this.name = name;
