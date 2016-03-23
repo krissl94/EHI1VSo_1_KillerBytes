@@ -139,27 +139,50 @@ public class KillerByte extends TeamRobot implements Serializable {
             setFire(power);
         }
     }
+    public void goTo(double x, double y) {
+
+	/* Calculate the turn required get there */
+        double angleToTarget = getAngle(x, y);
+        double targetAngle = Utils.normalRelativeAngle(angleToTarget - getHeadingRadians());
+
+        //Stelling v pythagoras
+        double distanceToEnemyX = Math.abs(x);
+        double distanceToEnemyY = Math.abs(y);
+        double distance = Math.sqrt((Math.pow(distanceToEnemyX, 2) + Math.pow(distanceToEnemyY, 2)));
+
+	/* This is a simple method of performing set front as back */
+        double turnAngle = Math.atan(Math.tan(targetAngle));
+        setTurnRightRadians(turnAngle);
+        if(targetAngle == turnAngle) {
+            setAhead(distance);
+        } else {
+            setBack(distance);
+        }
+    }
 
     public void moveTo(double x, double y){
         //TODO: X and Y are coordinates the robot should drive to
         //TODO: Calculate which way to drive
         double myX = getX();
-        System.out.println("My X = " + myX);
+//        System.out.println("My X = " + myX);
         double myY = getY();
-        System.out.println("My Y = " + myY);
-
-        Double target = getAngle(x, y);
-        System.out.println("Angle = " + target);
+//        System.out.println("My Y = " + myY);
+//
+//        Double target = getAngle(x, y);.
+        double angleToTarget = getAngle(x, y);
+        double target = Utils.normalRelativeAngle(angleToTarget - getHeadingRadians());
+        System.out.println("Relative Angle = " + target);
 
         double heading = 0;
         if (getHeading() > 180) {
             heading = -360 + getHeading();
-            System.out.println("My heading = " + heading);
+            System.out.println("> 180 My heading = " + heading);
         } else if (getHeading() <= 180) {
             heading = getHeading();
-            System.out.println("My heading = " + heading);
+            System.out.println("< 180 My heading = " + heading);
         }
 
+        System.out.println("Absolute Angle = " + Math.abs(heading) + Math.abs(target));
         //moveTo(distanceToEnemy)
         double distanceToEnemyX = Math.abs(myX -x);
         double distanceToEnemyY = Math.abs(myY -y);
@@ -168,24 +191,22 @@ public class KillerByte extends TeamRobot implements Serializable {
         if ((Math.abs(heading) + Math.abs(target) <= 180) && target < 0) {
             setTurnLeft(Math.abs(heading) + Math.abs(target));
             System.out.println("1. Turns Left");
-            setAhead(distanceToEnemy);
         } else if ((Math.abs(heading) + Math.abs(target) <= 180) && target > 0) {
             setTurnRight(Math.abs(heading) + Math.abs(target));
             System.out.println("2. Turns Right");
-            setAhead(distanceToEnemy);
         } else if ((Math.abs(heading) + Math.abs(target) > 180 && target > 0)) {
             setTurnLeft((180 - Math.abs(heading) + (180 - Math.abs(target))));
             System.out.println("3. Turns Left");
-            setAhead(distanceToEnemy);
         } else if (Math.abs(heading) + Math.abs(target) > 180 && target < 0) {
             setTurnRight((180 - Math.abs(heading) + (180 - Math.abs(target))));
             System.out.println("4. Turns Right");
-            setAhead(distanceToEnemy);
         } else {
             System.out.println("Something went wrong");
         }
 
-
+        if(getTurnRemaining() < 10) {
+            setAhead(distanceToEnemy);
+        }
         /* Message:
             1. De droid krijgt informatie over de X en Y waar deze naartoe moet.
             2. De droid verwerkt deze informatie en rijdt op dat doel af.
@@ -201,15 +222,22 @@ public class KillerByte extends TeamRobot implements Serializable {
 
     /**
      *
-     * @param lat2
-     * @param lon2
+     * @param x
+     * @param y
      * @return the angle between 2 points. Result is -180 to +180. -160 is a left turn, +160 is a right turn
      */
-    private double getAngle(double lat2, double lon2){
-        double lon1 = getY();
-        double lat1 = getX();
+    private double getAngle(double x, double y){
+//        double lon1 = getY();
+//        double lat1 = getX();
+//
+//        return normalRelativeAngleDegrees(Math.toDegrees(Math.atan2(lon2-lon1, lat2-lat1)));
 
-        return normalRelativeAngleDegrees(Math.toDegrees(Math.atan2(lon2-lon1, lat2-lat1)));
+        /* Transform our coordinates into a vector */
+        x = x -  getX();
+        y = y -  getY();
+
+        return Math.atan2(x, y);
+
     }
 
     /**
