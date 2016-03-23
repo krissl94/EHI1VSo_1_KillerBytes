@@ -17,13 +17,13 @@ public class EnemyBot implements Serializable{
     private String role;
     private ArrayList<double[]> recordedPositions;
 
-    public EnemyBot(ScannedRobotEvent TargetTank, double x, double y){//String name, int firstRecordedHealth, int lastRecordedHealth, String role, int x, int y) {
+    public EnemyBot(ScannedRobotEvent TargetTank, double x, double y, double headingRadians){//String name, int firstRecordedHealth, int lastRecordedHealth, String role, int x, int y) {
         this.name = TargetTank.getName();
         this.firstRecordedHealth = TargetTank.getEnergy();
         this.lastRecordedHealth = TargetTank.getEnergy();
         this.role = determineRole(TargetTank.getEnergy());
         this.recordedPositions = new ArrayList<>();
-        this.recordedPositions.add(determinePosition(TargetTank, x, y));
+        this.recordedPositions.add(determinePosition(TargetTank, x, y, headingRadians));
     }
 
     public String getName() {
@@ -74,7 +74,7 @@ public class EnemyBot implements Serializable{
         }
     }
 
-    private double[] determinePosition(ScannedRobotEvent targetTank, double x, double y){
+    private double[] determinePosition(ScannedRobotEvent targetTank, double x, double y, double headingRadians){
 
         double myX = x;
         System.out.println("My X = " + myX);
@@ -102,7 +102,7 @@ public class EnemyBot implements Serializable{
     }
 
     public String toString(){
-        return "Robot " + name + " was first recorded with" + firstRecordedHealth + "energy and is probably a " + role + ". He was last seen at " + recordedPositions.get(recordedPositions.size() -1 )[0] + "," + recordedPositions.get(recordedPositions.size() -1 )[0] + " his energy is " + lastRecordedHealth;
+        return "Robot " + name + " was first recorded with" + firstRecordedHealth + "energy and is probably a " + role + ". He was last seen at " +  " his energy is " + lastRecordedHealth;
     }
 
     //public EnemyBot(ScannedRobotEvent e) {

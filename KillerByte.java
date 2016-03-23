@@ -353,7 +353,7 @@ public class KillerByte extends TeamRobot implements Serializable {
             broadcastStats(allyStats);
         } else if (e.getMessage() instanceof ScannedRobotEvent && !(((ScannedRobotEvent) e.getMessage()).getName().startsWith("EHI1VSo_1_"))) {
             System.out.println("Is enemy data!");
-            EnemyBot enemyBot = new EnemyBot((ScannedRobotEvent)e.getMessage(), getX(), getY());
+            EnemyBot enemyBot = new EnemyBot((ScannedRobotEvent)e.getMessage(), getX(), getY(), getHeadingRadians());
             if (!(enemyStats).getEnemies().containsKey(enemyBot.getName())) {
                 System.out.println("This enemy's not registered yet!");
                 enemyStats.addEnemy(enemyBot);

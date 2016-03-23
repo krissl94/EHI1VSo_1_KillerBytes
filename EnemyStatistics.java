@@ -75,7 +75,7 @@ public class EnemyStatistics implements Serializable{
         //TODO: Update instead of Replace
         EnemyBot bot = this.enemies.get(enemy.getName());
         bot.setLastRecordedHealth(enemy.getLastRecordedHealth());
-        bot.addPosition(enemy.getRecordedPositions().get(0));
+//        bot.addPosition(enemy.getRecordedPositions().get(0));
 
 //        this.enemies.replace(enemy.getName(), enemy);
     }
