@@ -27,8 +27,8 @@ public class RobotTwo extends KillerByte implements Serializable{
             if(allyStats != null)
                 reportTo(allyStats.getLeader());
             attack();
-
-            goCrazy();
+            setTurnRadarLeft(360);
+            System.out.println(enemyStats.getTargetName());
             execute();
         }
     }

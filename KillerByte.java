@@ -36,16 +36,16 @@ public class KillerByte extends TeamRobot implements Serializable {
         Random rand = new Random();
         setTurnRadarRight(360);
 
-        if(rand.nextInt(2) == 0){
+        if (rand.nextInt(2) == 0) {
             //Go backward
-            if(getDistanceRemaining() < 10) {
+            if (getDistanceRemaining() < 10) {
                 setBack(100);
                 setTurnRadarRight(360);
                 setTurnRight(40);
             }
-        }else{
+        } else {
             //Go forward
-            if(getDistanceRemaining() < 10) {
+            if (getDistanceRemaining() < 10) {
 
                 setAhead(100);
                 setTurnRadarRight(360);
@@ -54,8 +54,6 @@ public class KillerByte extends TeamRobot implements Serializable {
             }
         }
         setTurnRadarRight(360);
-
-        execute();
     }
 
     /**
@@ -160,6 +158,9 @@ public class KillerByte extends TeamRobot implements Serializable {
 
     public void shootAt(double[] coords){
         //Don't fire if anyone is in my line of fire
+        //Calculate line of fire..
+        //Gun position is known
+        //
         if(role != "droid"){
             //Set
             //my radar needs to lock on to the target.
@@ -368,14 +369,14 @@ public class KillerByte extends TeamRobot implements Serializable {
         //  - Ally stats
         //  - Enemy stats
         System.out.println("I received a message from "+ e.getSender());
-        if(e.getMessage() instanceof KillerByte){
+        if(e.getMessage() instanceof AllyBot){
             System.out.println("Is ally data!");
             if (!(allyStats.getAllies().containsKey(e.getSender()))) {
                 System.out.println("He's not registered yet!");
-                allyStats.addAlly(new AllyBot((KillerByte) e.getMessage()));
+                allyStats.addAlly((AllyBot) e.getMessage());
             } else {
                 System.out.println("He's registered already! Updating..");
-                allyStats.updateAlly(new AllyBot((KillerByte) e.getMessage()));
+                allyStats.updateAlly((AllyBot) e.getMessage());
             }
             //Allies were updated, so i should broadcast the new object
             broadcastStats(allyStats);

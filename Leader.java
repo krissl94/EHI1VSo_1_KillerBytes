@@ -31,9 +31,10 @@ public class Leader extends KillerByte {
             System.out.println(enemyStats.toString());
             Random random = new Random();
             this.setColors(Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()), Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()), Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()));
-            super.goCrazy();
-            attack();
+            setTurnRadarLeft(360);
+
             System.out.println("tick");
+            execute();
         }
     }
 
