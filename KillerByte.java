@@ -153,9 +153,9 @@ public class KillerByte extends TeamRobot implements Serializable {
 
         double heading = 0;
         if (getHeading() > 180) {
-            heading = (getHeading()*-1) + 180;
+            heading = -360 + getHeading();
             System.out.println("My heading = " + heading);
-        } else if (getHeading() < 180) {
+        } else if (getHeading() <= 180) {
             heading = getHeading();
             System.out.println("My heading = " + heading);
         }
@@ -165,11 +165,11 @@ public class KillerByte extends TeamRobot implements Serializable {
         double distanceToEnemyY = Math.abs(myY -y);
         double distanceToEnemy = Math.sqrt((Math.pow(distanceToEnemyX, 2) + Math.pow(distanceToEnemyY, 2)));
 
-        if ((Math.abs(heading) + Math.abs(target) < 180) && target < 0) {
+        if ((Math.abs(heading) + Math.abs(target) <= 180) && target < 0) {
             setTurnLeft(Math.abs(heading) + Math.abs(target));
             System.out.println("1. Turns Left");
             setAhead(distanceToEnemy);
-        } else if ((Math.abs(heading) + Math.abs(target) < 180) && target > 0) {
+        } else if ((Math.abs(heading) + Math.abs(target) <= 180) && target > 0) {
             setTurnRight(Math.abs(heading) + Math.abs(target));
             System.out.println("2. Turns Right");
             setAhead(distanceToEnemy);
