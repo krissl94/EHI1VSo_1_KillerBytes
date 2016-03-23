@@ -24,6 +24,11 @@ public class KillerByte extends TeamRobot implements Serializable {
     public EnemyStatistics enemyStats = null;
     Boolean isLeader = false;
 
+    public void init(){
+        allyStats = new AllyStatistics("EHI1VSo_1_KillerBytes.Leader");
+        allyStats.addAlly(new AllyBot(this));
+        enemyStats = new EnemyStatistics();
+    }
     /**
      * Move randomly across the field when there is no target or specific instruction
      */
@@ -105,7 +110,7 @@ public class KillerByte extends TeamRobot implements Serializable {
         }
     }
 
-    public void calculateCoordinates(ScannedRobotEvent e){
+    public double[] calculateCoordinates(ScannedRobotEvent e){
         double myX = getX();
         System.out.println("My X = " + myX);
         double myY = getY();
@@ -342,8 +347,8 @@ public class KillerByte extends TeamRobot implements Serializable {
             broadcastStats(allyStats);
         } else if (e.getMessage() instanceof ScannedRobotEvent && !(((ScannedRobotEvent) e.getMessage()).getName().startsWith("EHI1VSo_1_"))) {
             System.out.println("Is enemy data!");
-            EnemyBot enemyBot = new EnemyBot((ScannedRobotEvent)e.getMessage(), getX(), getY(), getHeadingRadians());
-            if (!(enemyStats).getEnemies().containsKey(enemyBot.getName())) {
+            EnemyBot enemyBot = new EnemyBot((ScannedRobotEvent)e.getMessage(), calculateCoordinates((ScannedRobotEvent) e.getMessage()));
+            if (!(enemyStats.getEnemies().containsKey(enemyBot.getName()))) {
                 System.out.println("This enemy's not registered yet!");
                 enemyStats.addEnemy(enemyBot);
             } else {
