@@ -63,8 +63,10 @@ public class KillerByte extends TeamRobot implements Serializable {
         double changeInEnergy = enemyBot.getFirstRecordedHealth() - enemyBot.getLastRecordedHealth();
         if(changeInEnergy > 0 && changeInEnergy <=3){
             //dodge the bullet
-            movementDirection = -movementDirection;
-            setAhead((e.getDistance()/4+25));
+
+            //movementDirection = -movementDirection;
+            //movementDirection is -1 now, the -1 in setAhead should have been movementDirection
+            setAhead((e.getDistance()/4+25)-1);
         }
     }
 
