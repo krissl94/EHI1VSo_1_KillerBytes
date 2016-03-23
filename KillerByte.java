@@ -9,6 +9,7 @@ import sun.plugin2.message.Message;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Random;
 
 import static robocode.util.Utils.normalAbsoluteAngle;
@@ -150,7 +151,25 @@ public class KillerByte extends TeamRobot implements Serializable {
         }
     }
 
-    public void smartShooting(double x, double y){
+    public void smartShooting(ScannedRobotEvent e, double x, double y){
+        // Target information
+        double enemyX[] = enemyBot.getRecordedPositions().get(0);
+        double enemyY[] = enemyBot.getRecordedPositions().get(1);
+        double targetVelocity = e.getVelocity();
+        double targetHeading = e.getHeading();
+        double bulletPower = enemyBot.getFirstRecordedHealth() - enemyBot.getLastRecordedHealth();
+        double bulletVelocity = 20 - 3 * bulletPower;
+
+        // Own information
+        double myX = getX();
+        double myY = getY();
+        
+        double angularVelocityDegPerSec = 0;
+        double angularVelocityRadPerSec = Math.toRadians(angularVelocityDegPerSec);
+
+        double distanceToEnemyX = myX - enemyX[0];
+        double distanceToEnemyY = myY - enemyY[0];
+        double distance = Math.sqrt((Math.pow(distanceToEnemyX, 2) + Math.pow(distanceToEnemyY, 2)));
 
 
     }

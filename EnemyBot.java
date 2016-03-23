@@ -86,15 +86,14 @@ public class EnemyBot implements Serializable{
         double enemyBearing = targetTank.getBearingRadians();
         System.out.println("Enemy bearing = " + enemyBearing);
 
-        /*double absoluteBearing = getHeadingRadians() + targetTank.getBearingRadians();
+        double absoluteBearing = headingRadians + targetTank.getBearingRadians();
         double enemyX = myX + (enemyDistance * Math.sin(absoluteBearing));
         double enemyY = myY + (enemyDistance * Math.cos(absoluteBearing));
 
         System.out.println("Enemy " + targetTank.getName() +" X = " + enemyX + ", Y = " + enemyY);
 
 
-        return new double[]{enemyX,enemyY};*/
-        return null;
+        return new double[]{enemyX,enemyY};
     }
 
     public double[] getLastRecordedPosition(){
