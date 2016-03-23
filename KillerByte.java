@@ -24,10 +24,6 @@ public class KillerByte extends TeamRobot implements Serializable {
     public EnemyStatistics enemyStats = null;
     Boolean isLeader = false;
 
-    public void smartShooting(){
-
-    }
-
     /**
      * Move randomly across the field when there is no target or specific instruction
      */
@@ -140,9 +136,16 @@ public class KillerByte extends TeamRobot implements Serializable {
             setFire(power);
         }
     }
+
+    public void smartShooting(double x, double y){
+
+
+    }
+
+
     public void goTo(double x, double y) {
 
-	/* Calculate the turn required get there */
+	/* Calculate the turn required to get there */
         double angleToTarget = getAngle(x, y);
         double targetAngle = Utils.normalRelativeAngle(angleToTarget - getHeadingRadians());
 
@@ -208,16 +211,6 @@ public class KillerByte extends TeamRobot implements Serializable {
         if(getTurnRemaining() < 10) {
             setAhead(distanceToEnemy);
         }
-        /* Message:
-            1. De droid krijgt informatie over de X en Y waar deze naartoe moet.
-            2. De droid verwerkt deze informatie en rijdt op dat doel af.
-            3. De droid krijgt nieuwe informatie waar precies hetzelfde in staat als in de oude informatie
-            4. De droid verwerkt deze informatie en rijdt zo zijn doel mis.
-
-            Het updaten werkt nog niet goed? Of zie ik 't verkeerd...
-        */
-
-
 
     }
 

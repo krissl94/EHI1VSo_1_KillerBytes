@@ -11,6 +11,7 @@ public class Droid extends KillerByte implements robocode.Droid {
 
         while(true){
             goTo(170,450);
+            //smartShooting(100, 100);
             execute();
             //enemyStats.getEnemies().get(enemyStats.getTargetName()).getRecordedPositions().get(0)[0], enemyStats.getEnemies().get(enemyStats.getTargetName()).getRecordedPositions().get(0)[1]
         }

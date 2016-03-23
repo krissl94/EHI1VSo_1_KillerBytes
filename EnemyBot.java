@@ -58,12 +58,8 @@ public class EnemyBot implements Serializable{
         return recordedPositions;
     }
 
-    public void addPosition(ScannedRobotEvent targetTank, double x, double y){
-        recordedPositions.add(determinePosition(targetTank, x, y));
-    }
-    public void addPosition(double[] coordinates)
-    {
-        recordedPositions.add(coordinates);
+    public void addPosition(ScannedRobotEvent targetTank){
+        //recordedPositions.add(determinePosition(targetTank));
     }
 
     private String determineRole(double energy){
@@ -79,8 +75,26 @@ public class EnemyBot implements Serializable{
     }
 
     private double[] determinePosition(ScannedRobotEvent targetTank, double x, double y){
-        //Coordinaten uitrekenen adhv eigen positie en afstand enzo, mooi klusje voor nicky
-        return new double[]{1,1};
+
+        double myX = x;
+        System.out.println("My X = " + myX);
+        double myY = y;
+        System.out.println("My Y = " + myY);
+
+        double enemyDistance = targetTank.getDistance();
+        System.out.println("Enemy distance = " + enemyDistance);
+        double enemyBearing = targetTank.getBearingRadians();
+        System.out.println("Enemy bearing = " + enemyBearing);
+
+        /*double absoluteBearing = getHeadingRadians() + targetTank.getBearingRadians();
+        double enemyX = myX + (enemyDistance * Math.sin(absoluteBearing));
+        double enemyY = myY + (enemyDistance * Math.cos(absoluteBearing));
+
+        System.out.println("Enemy " + targetTank.getName() +" X = " + enemyX + ", Y = " + enemyY);
+
+
+        return new double[]{enemyX,enemyY};*/
+        return null;
     }
 
     public double[] getLastRecordedPosition(){
