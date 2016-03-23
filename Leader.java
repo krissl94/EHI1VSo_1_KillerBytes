@@ -8,6 +8,7 @@ import robocode.TeamRobot;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -16,24 +17,25 @@ import java.util.Random;
  */
 public class Leader extends KillerByte {
     String targetName;
+    public static Map<String, EnemyBot> myEnemies = new HashMap<>();
 
     public void run(){
         isLeader = true;
-        allyStats = new AllyStatistics("EHI1VSo_1_KillerBytes.Leader");
-        allyStats.addAlly(new AllyBot(this));
+        init();
         setAdjustGunForRobotTurn(true);
         setAdjustRadarForGunTurn(true);
         setAdjustRadarForRobotTurn(true);
-        enemyStats = new EnemyStatistics();
 
         //TODO: Broadcast an initialized object
         broadcastStats(allyStats);
         while(true){
             // SET RANDOM COLORS
+            myEnemies = enemyStats.getEnemies();
             System.out.println(enemyStats.toString());
             Random random = new Random();
             this.setColors(Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()), Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()), Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()));
             super.goCrazy();
+            System.out.println("tick");
         }
     }
 

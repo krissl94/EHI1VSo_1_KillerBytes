@@ -17,10 +17,10 @@ public class RobotOne extends KillerByte implements Serializable {
     Boolean running = false;
 
     public void run(){
+
         name = getName();
         role = "robot";
         running = true;
-        enemyStats = new EnemyStatistics();
         setAdjustGunForRobotTurn(true);
         setAdjustRadarForGunTurn(true);
         setAdjustRadarForRobotTurn(true);
@@ -31,6 +31,7 @@ public class RobotOne extends KillerByte implements Serializable {
             if(allyStats != null) {
                 reportTo(allyStats.getLeader());
             }
+
             execute();
         }
     }

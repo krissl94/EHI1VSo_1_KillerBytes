@@ -142,8 +142,7 @@ public class KillerByte extends TeamRobot implements Serializable {
         System.out.println("Enemy " + e.getName() +" X = " + enemyX);
         System.out.println("Enemy " + e.getName() +"Y = " + enemyY);
         return new double[]{enemyX, enemyY};
-
-        // Follow enemy robot & shoot
+// Follow enemy robot & shoot
         //turnRightRadians(e.getBearingRadians());
         //setAhead(enemyDistance);
         //fire(2);

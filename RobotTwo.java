@@ -13,6 +13,7 @@ import java.io.Serializable;
 public class RobotTwo extends KillerByte implements Serializable{
     Boolean running = false;
     public void run(){
+        init();
         name = getName();
         role = "robot";
 
@@ -20,12 +21,13 @@ public class RobotTwo extends KillerByte implements Serializable{
         setAdjustRadarForGunTurn(true);
         setAdjustRadarForRobotTurn(true);
         running = true;
-        enemyStats = new EnemyStatistics();
+
         while(true){
             //TODO: Every tick, a robot reports itself to the leader
             if(allyStats != null)
                 reportTo(allyStats.getLeader());
             setTurnRadarRight(360);
+
             execute();
         }
     }
