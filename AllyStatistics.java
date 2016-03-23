@@ -40,4 +40,16 @@ public class AllyStatistics implements Serializable{
     public void updateAlly(AllyBot ally){
         this.allies.replace(ally.getName(), ally);
     }
+
+    public AllyBot getOtherRobot(String myName){
+        for(Map.Entry<String,AllyBot> entry: allies.entrySet()) {
+            AllyBot ally = entry.getValue();
+            if(!ally.getRole().equals(myName)){
+                return ally;
+            }
+        }
+        return null;
+
+    }
+
 }

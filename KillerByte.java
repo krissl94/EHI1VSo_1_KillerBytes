@@ -1,9 +1,6 @@
 package EHI1VSo_1_KillerBytes;
 
-import robocode.MessageEvent;
-import robocode.ScannedRobotEvent;
-import robocode.TeamRobot;
-import robocode.TurnCompleteCondition;
+import robocode.*;
 import robocode.util.Utils;
 import sun.plugin2.message.Message;
 
@@ -41,15 +38,20 @@ public class KillerByte extends TeamRobot implements Serializable {
 
         if(rand.nextInt(2) == 0){
             //Go backward
-            setBack(100);
-            setTurnRadarRight(360);
-            setTurnRight(40);
+            if(getDistanceRemaining() < 10) {
+                setBack(100);
+                setTurnRadarRight(360);
+                setTurnRight(40);
+            }
         }else{
             //Go forward
-            setAhead(100);
-            setTurnRadarRight(360);
+            if(getDistanceRemaining() < 10) {
 
-            setTurnRight(50);
+                setAhead(100);
+                setTurnRadarRight(360);
+
+                setTurnRight(50);
+            }
         }
         setTurnRadarRight(360);
 
@@ -156,31 +158,30 @@ public class KillerByte extends TeamRobot implements Serializable {
         }
     }
 
-    public void smartShooting(ScannedRobotEvent e, double x, double y){
-        // Target information
-        double enemyX[] = enemyBot.getRecordedPositions().get(0);
-        double enemyY[] = enemyBot.getRecordedPositions().get(1);
-        double targetVelocity = e.getVelocity();
-        double targetHeading = e.getHeading();
-        double bulletPower = enemyBot.getFirstRecordedHealth() - enemyBot.getLastRecordedHealth();
-        double bulletVelocity = 20 - 3 * bulletPower;
+    public void shootAt(double[] coords){
+        //Don't fire if anyone is in my line of fire
+        if(role != "droid"){
+            //Set
+            //my radar needs to lock on to the target.
+            double radarPosition = normalRelativeAngleDegrees(getAngle(coords[0], coords[1]));
+            setTurnRadarRight(radarPosition);
 
-        // Own information
-        double myX = getX();
-        double myY = getY();
-        
-        double angularVelocityDegPerSec = 0;
-        double angularVelocityRadPerSec = Math.toRadians(angularVelocityDegPerSec);
+            double directionToTarget = getHeading() - getGunHeading();
+            setTurnGunRight(directionToTarget);
 
-        double distanceToEnemyX = myX - enemyX[0];
-        double distanceToEnemyY = myY - enemyY[0];
-        double distance = Math.sqrt((Math.pow(distanceToEnemyX, 2) + Math.pow(distanceToEnemyY, 2)));
-
-
+            //Aim gun at target
+            //Aim radar with gun
+            //Check line of fire
+            //
+        }else {
+        }
+        setFire(3);
     }
 
 
-    public void goTo(double x, double y) {
+    public void goTo(double[] coords) {
+        double x = coords[0];
+        double y = coords[1];
 
 	/* Calculate the turn required to get there */
         double angleToTarget = getAngle(x, y);
@@ -196,8 +197,9 @@ public class KillerByte extends TeamRobot implements Serializable {
         setTurnRightRadians(turnAngle);
         if(targetAngle == turnAngle) {
             setAhead(distance);
-        } else {
-            setBack(distance);
+        }
+        else {
+            setTurnRight(180);
         }
     }
 
@@ -391,4 +393,37 @@ public class KillerByte extends TeamRobot implements Serializable {
             broadcastStats(enemyStats);
         }
     }
+
+    public void onRobotDeath(RobotDeathEvent e){
+        if(isLeader){
+            if(e.getName().startsWith("EHI1VSo_1_KillerBytes")){
+                //Ally died
+                if(e.getName().equals(allyStats.getLeader())){
+                    if(role.equals("robot")){
+                        if(this.getEnergy() > allyStats.getOtherRobot(getName()).getEnergy() ){
+                            isLeader = true;
+                            System.out.println("I am the new leader");
+                        }
+                    }
+                }
+            }
+            else{
+                //Enemy died
+                enemyStats.enemyDied(enemyStats.getEnemies().get(e.getName()));
+            }
+            broadcastStats(enemyStats);
+        }
+    }
+
+    public void attack(){
+        if(enemyStats != null && enemyStats.getTargetName() != null) {
+            if(enemyStats.getEnemies().get(enemyStats.getTargetName()) != null){
+                goTo(enemyStats.getEnemies().get(enemyStats.getTargetName()).getLastRecordedPosition());//This could be null, that means that the target has died but not updated yet, if that's the case, force update the
+                shootAt(enemyStats.getEnemies().get(enemyStats.getTargetName()).getLastRecordedPosition());
+            }
+        }else{
+            //Wait for new target?
+        }
+    }
+
 }

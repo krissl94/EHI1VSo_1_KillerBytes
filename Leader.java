@@ -2,6 +2,7 @@ package EHI1VSo_1_KillerBytes;
 
 import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import robocode.MessageEvent;
+import robocode.RobotDeathEvent;
 import robocode.ScannedRobotEvent;
 import robocode.TeamRobot;
 //TODO Delete in final
@@ -16,9 +17,6 @@ import java.util.Random;
  * Created by kris on 9-3-16.
  */
 public class Leader extends KillerByte {
-    String targetName;
-    public static Map<String, EnemyBot> myEnemies = new HashMap<>();
-
     public void run(){
         isLeader = true;
         init();
@@ -30,11 +28,11 @@ public class Leader extends KillerByte {
         broadcastStats(allyStats);
         while(true){
             // SET RANDOM COLORS
-            myEnemies = enemyStats.getEnemies();
             System.out.println(enemyStats.toString());
             Random random = new Random();
             this.setColors(Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()), Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()), Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()));
             super.goCrazy();
+            attack();
             System.out.println("tick");
         }
     }
@@ -49,7 +47,6 @@ public class Leader extends KillerByte {
         // functie : isFriendly(name), ez
         messageReceived(e);
     }
-
 
     //TODO Delete in final
     public void onPaint(Graphics2D g){

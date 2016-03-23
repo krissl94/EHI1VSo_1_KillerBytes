@@ -13,16 +13,21 @@ public class EnemyStatistics implements Serializable{
     private int droidsAlive;
     private int robotsAlive;
     private String targetName;
+    private Map<String, EnemyBot> enemies;
+
+    public String getTargetByRole(String role){
+        for(Map.Entry<String,EnemyBot> entry: enemies.entrySet()) {
+            EnemyBot enemy = entry.getValue();
+            if(enemy.getRole().equals(role)){
+                return enemy.getName();
+            }
+        }
+        return "";
+    }
 
     public String getTargetName() {
         return targetName;
     }
-
-    public void setTargetName(String targetName) {
-        this.targetName = targetName;
-    }
-
-    private Map<String, EnemyBot> enemies;
 
     public EnemyStatistics() {
         this.leaderAlive = true;
@@ -52,21 +57,19 @@ public class EnemyStatistics implements Serializable{
     public Map<String, EnemyBot> getEnemies() {
         return enemies;
     }
-    public void setEnemies(Map<String, EnemyBot> enemies) {
-        this.enemies = enemies;
-    }
 
     public boolean hasEnemiesRegistered(){
         return this.enemies.size() > 0;
     }
 
-    public void addEnemyFromEvent(ScannedRobotEvent e){
-//    addEnemy(new EnemyBot(e));
-    }
     public void addEnemy(EnemyBot enemy ){
+        if(targetName == null){
+            targetName = enemy.getName();
+        }
         enemies.put(enemy.getName(), enemy);
         switch(enemy.getRole()){
             case "leader":
+                targetName = enemy.getName();
                 break;
             case "droid":
                 this.droidsAlive++;
@@ -83,9 +86,8 @@ public class EnemyStatistics implements Serializable{
 
         double[] lastCoordinates = enemy.getLastRecordedPosition();
         bot.addPosition(lastCoordinates);
-
-//        this.enemies.replace(enemy.getName(), enemy);
     }
+
     public void enemyDied(EnemyBot enemy){
         if(enemy.getRole().equals("droid")){
             this.droidDied();
@@ -94,6 +96,19 @@ public class EnemyStatistics implements Serializable{
         }else if(enemy.getRole().equals("leader")){
             this.leaderDied();
         }
+
+        if(this.targetName.equals(enemy.getName())){
+            //TODO: Update target
+            if(robotsAlive > 0){
+                targetName = getTargetByRole("robot");
+            }
+            else{
+                //Set target to a droid
+                targetName = getTargetByRole("droid");
+            }
+        }
+
+        enemies.remove(enemy.getName());
     }
 
     public String toString(){
@@ -109,4 +124,8 @@ public class EnemyStatistics implements Serializable{
         toReturn+="/-------------------------------------/\r\n";
         return toReturn;
     }
+    public void updateTarget(){
+
+    }
+
 }
