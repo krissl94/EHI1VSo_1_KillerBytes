@@ -32,7 +32,7 @@ public class Leader extends KillerByte {
             // SET RANDOM COLORS
             System.out.println(enemyStats.toString());
             Random random = new Random();
-            this.setColors(Color.getHSBColor(random.nextFloat(),random.nextFloat(),random.nextFloat()),Color.getHSBColor(random.nextFloat(),random.nextFloat(),random.nextFloat()),Color.getHSBColor(random.nextFloat(),random.nextFloat(),random.nextFloat()));
+            this.setColors(Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()), Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()), Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()));
             super.goCrazy();
         }
     }
@@ -61,38 +61,46 @@ public class Leader extends KillerByte {
 
         //Draw scan circle on self
         g.setColor(Color.green);
-        g.drawOval((int) this.getX() - 600, (int) this.getY() - 600, 1200, 1200);
 
+        g.drawOval((int) this.getX() - 600, (int) this.getY() - 600, 1200, 1200);
         //draw labels on each sides of the circle.
-        g.drawString("ScanRange",(float)this.getX()-600,(float)this.getY());
+        g.drawString("ScanRange",(int)this.getX()-600,(int)this.getY());
         g.drawString("ScanRange",(int)this.getX(),(int)this.getY()-600);
         g.drawString("ScanRange",(int)this.getX(),(int)this.getY()+600);
         g.drawString("ScanRange",(int)this.getX()+600,(int)this.getY());
 
         // Draw square at last known enemy position, also put the co-ordinates in text above.
-        for(Map.Entry<String,EnemyBot> entry: enemyStats.getEnemies().entrySet()) {
-            EnemyBot enemy = entry.getValue();
-            ArrayList<double[]> positions = enemy.getRecordedPositions();
 
-            for (double[] position : positions) {
+        // ONLY DO THIS IF THE ENEMYSTATS HAS ENEMIES.
+        // SAVES A BUTTLOAD OF NULLPOINTER ERRORS.
+        if(enemyStats.hasEnemiesRegistered()){
+            for(Map.Entry<String,EnemyBot> entry: enemyStats.getEnemies().entrySet()) {
+                EnemyBot enemy = entry.getValue();
+                ArrayList<double[]> positions = enemy.getRecordedPositions();
 
-                // change color of square to red if it's the last entry
-                if (position == positions.get(positions.size())) {
-                    g.setColor(Color.RED);
-                }// else set color to CYAN (light blue)
-                else {
-                    g.setColor(Color.CYAN);
+                if(positions.size() > 0){
+                    for (double[] position : positions) {
+                        // TODO : Check functionality after fixing position registration. (this should work)
+                        if(position.length > 0){
+                            // change color of square to red if it's the last entry
+                            if (position[0] == positions.get(positions.size() - 1)[0] && position[1] == positions.get(positions.size() - 1)[1]) {
+                                g.setColor(Color.RED);
+                            }// else set color to CYAN (light blue)
+                            else {
+                                g.setColor(Color.CYAN);
+                            }
+                            g.drawRect((int) position[0], (int) position[1], 10, 10);
+                            // display text; X,Y
+                            g.drawString(String.valueOf(position[0]) + "," + String.valueOf(position[1]), (int) position[0], (int) position[1] - 10);
+                            // display text; bot name;
+                            g.drawString(entry.getKey(), (int) (position[0] - (entry.getKey().length())), (int) (position[1] + 10));
+                        }
+                    }
                 }
-                g.drawRect((int)position[0], (int)position[1], 10, 10);
-                // display text; X,Y
-                g.drawString(String.valueOf(position[0]) + "," + String.valueOf(position[1]), (int)position[0], (int)position[1] - 10);
-                // display text; bot name;
-                g.drawString(entry.getKey(), (int)(position[0] - (entry.getKey().length())), (int)(position[1] + 10));
             }
-
-            for(Map.Entry allyEntry:allyStats.getAllies().entrySet()){
-                KillerByte ally = (KillerByte) allyEntry.getValue();
-
+        }
+        for(Map.Entry allyEntry:allyStats.getAllies().entrySet()){
+            AllyBot ally = (AllyBot) allyEntry.getValue();
                 g.drawOval((int) ally.getX() - 600, (int) ally.getY() - 600, 1200, 1200);
 
                 //draw labels on each sides of the circle.
@@ -103,4 +111,3 @@ public class Leader extends KillerByte {
             }
         }
     }
-}

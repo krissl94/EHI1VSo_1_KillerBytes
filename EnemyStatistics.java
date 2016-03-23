@@ -55,6 +55,11 @@ public class EnemyStatistics implements Serializable{
     public void setEnemies(Map<String, EnemyBot> enemies) {
         this.enemies = enemies;
     }
+
+    public boolean hasEnemiesRegistered(){
+        return this.enemies.size() > 0;
+    }
+
     public void addEnemyFromEvent(ScannedRobotEvent e){
 //    addEnemy(new EnemyBot(e));
     }
