@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class AllyStatistics implements Serializable{
     private String leader;
-    private Map<String, KillerByte> allies;
+    private Map<String, AllyBot> allies;
 
     public AllyStatistics(String leader ) {
         this.leader = leader;
@@ -26,18 +26,18 @@ public class AllyStatistics implements Serializable{
         this.leader = leader;
     }
 
-    public Map<String, KillerByte> getAllies() {
+    public Map<String, AllyBot> getAllies() {
         return allies;
     }
 
-    public TeamRobot getAlly(String name) {
+    public AllyBot getAlly(String name) {
         return allies.get(name);
     }
 
-    public void addAlly(KillerByte ally) {
-        this.allies.put(ally.name, ally);
+    public void addAlly(AllyBot ally) {
+        this.allies.put(ally.getName(), ally);
     }
-    public void updateAlly(KillerByte ally){
-        this.allies.replace(ally.name, ally);
+    public void updateAlly(AllyBot ally){
+        this.allies.replace(ally.getName(), ally);
     }
 }

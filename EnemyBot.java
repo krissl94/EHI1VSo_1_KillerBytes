@@ -17,13 +17,13 @@ public class EnemyBot implements Serializable{
     private String role;
     private ArrayList<double[]> recordedPositions;
 
-    public EnemyBot(ScannedRobotEvent TargetTank){//String name, int firstRecordedHealth, int lastRecordedHealth, String role, int x, int y) {
+    public EnemyBot(ScannedRobotEvent TargetTank, double x, double y){//String name, int firstRecordedHealth, int lastRecordedHealth, String role, int x, int y) {
         this.name = TargetTank.getName();
         this.firstRecordedHealth = TargetTank.getEnergy();
         this.lastRecordedHealth = TargetTank.getEnergy();
         this.role = determineRole(TargetTank.getEnergy());
         this.recordedPositions = new ArrayList<>();
-        this.recordedPositions.add(determinePosition(TargetTank));
+        this.recordedPositions.add(determinePosition(TargetTank, x, y));
     }
 
     public String getName() {
@@ -42,7 +42,7 @@ public class EnemyBot implements Serializable{
         return lastRecordedHealth;
     }
 
-    public void setLastRecordedHealth(int lastRecordedHealth) {
+    public void setLastRecordedHealth(double lastRecordedHealth) {
         this.lastRecordedHealth = lastRecordedHealth;
     }
 
@@ -58,8 +58,12 @@ public class EnemyBot implements Serializable{
         return recordedPositions;
     }
 
-    public void addPosition(ScannedRobotEvent targetTank){
-        recordedPositions.add(determinePosition(targetTank));
+    public void addPosition(ScannedRobotEvent targetTank, double x, double y){
+        recordedPositions.add(determinePosition(targetTank, x, y));
+    }
+    public void addPosition(double[] coordinates)
+    {
+        recordedPositions.add(coordinates);
     }
 
     private String determineRole(double energy){
@@ -74,7 +78,7 @@ public class EnemyBot implements Serializable{
         }
     }
 
-    private double[] determinePosition(ScannedRobotEvent targetTank){
+    private double[] determinePosition(ScannedRobotEvent targetTank, double x, double y){
         //Coordinaten uitrekenen adhv eigen positie en afstand enzo, mooi klusje voor nicky
         return new double[]{1,1};
     }

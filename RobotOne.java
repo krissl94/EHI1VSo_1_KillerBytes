@@ -18,6 +18,7 @@ public class RobotOne extends KillerByte implements Serializable {
 
     public void run(){
         name = getName();
+        role = "robot";
         running = true;
         enemyStats = new EnemyStatistics();
         setAdjustGunForRobotTurn(true);

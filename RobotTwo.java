@@ -14,6 +14,8 @@ public class RobotTwo extends KillerByte implements Serializable{
     Boolean running = false;
     public void run(){
         name = getName();
+        role = "robot";
+
         setAdjustGunForRobotTurn(true);
         setAdjustRadarForGunTurn(true);
         setAdjustRadarForRobotTurn(true);

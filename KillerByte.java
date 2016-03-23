@@ -19,8 +19,9 @@ import static robocode.util.Utils.normalRelativeAngleDegrees;
  */
 public class KillerByte extends TeamRobot implements Serializable {
     public String name;
+    public String role;
     public AllyStatistics allyStats = null;
-    public EnemyStatistics enemyStats;
+    public EnemyStatistics enemyStats = null;
     Boolean isLeader = false;
 
     public void smartShooting(){
@@ -269,12 +270,13 @@ public class KillerByte extends TeamRobot implements Serializable {
     }
     public void reportTo(String leader){
         try{
-            sendMessage(leader, this);
+            sendMessage(leader, new AllyBot(this));
         } catch(IOException IOE){
 
         }
     }
     public void messageReceived(MessageEvent e){
+
         if(!isLeader){
             robotProcessData(e);
         }
@@ -338,16 +340,16 @@ public class KillerByte extends TeamRobot implements Serializable {
             System.out.println("Is ally data!");
             if (!(allyStats.getAllies().containsKey(e.getSender()))) {
                 System.out.println("He's not registered yet!");
-                allyStats.addAlly((KillerByte) e.getMessage());
+                allyStats.addAlly(new AllyBot((KillerByte) e.getMessage()));
             } else {
                 System.out.println("He's registered already! Updating..");
-                allyStats.updateAlly((KillerByte) e.getMessage());
+                allyStats.updateAlly(new AllyBot((KillerByte) e.getMessage()));
             }
             //Allies were updated, so i should broadcast the new object
             broadcastStats(allyStats);
-            } else if (e.getMessage() instanceof ScannedRobotEvent) {
+        } else if (e.getMessage() instanceof ScannedRobotEvent && !(((ScannedRobotEvent) e.getMessage()).getName().startsWith("EHI1VSo_1_"))) {
             System.out.println("Is enemy data!");
-            EnemyBot enemyBot = new EnemyBot((ScannedRobotEvent)e.getMessage());
+            EnemyBot enemyBot = new EnemyBot((ScannedRobotEvent)e.getMessage(), getX(), getY());
             if (!(enemyStats).getEnemies().containsKey(enemyBot.getName())) {
                 System.out.println("This enemy's not registered yet!");
                 enemyStats.addEnemy(enemyBot);

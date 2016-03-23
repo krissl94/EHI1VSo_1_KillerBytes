@@ -20,7 +20,7 @@ public class Leader extends KillerByte {
     public void run(){
         isLeader = true;
         allyStats = new AllyStatistics("EHI1VSo_1_KillerBytes.Leader");
-        allyStats.addAlly(this);
+        allyStats.addAlly(new AllyBot(this));
         setAdjustGunForRobotTurn(true);
         setAdjustRadarForGunTurn(true);
         setAdjustRadarForRobotTurn(true);
@@ -34,7 +34,6 @@ public class Leader extends KillerByte {
             Random random = new Random();
             this.setColors(Color.getHSBColor(random.nextFloat(),random.nextFloat(),random.nextFloat()),Color.getHSBColor(random.nextFloat(),random.nextFloat(),random.nextFloat()),Color.getHSBColor(random.nextFloat(),random.nextFloat(),random.nextFloat()));
             super.goCrazy();
-            execute();
         }
     }
 

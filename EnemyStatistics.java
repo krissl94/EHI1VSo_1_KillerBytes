@@ -28,7 +28,7 @@ public class EnemyStatistics implements Serializable{
         this.leaderAlive = true;
         this.droidsAlive = 0;
         this.robotsAlive = 0;
-        this.enemies = new HashMap<>();
+        enemies = new HashMap<>();
     }
 
     public boolean isLeaderAlive() {
@@ -56,17 +56,28 @@ public class EnemyStatistics implements Serializable{
         this.enemies = enemies;
     }
     public void addEnemyFromEvent(ScannedRobotEvent e){
-        addEnemy(new EnemyBot(e));
+//    addEnemy(new EnemyBot(e));
     }
-    public void addEnemy(EnemyBot enemy){
-        this.enemies.put(enemy.getName(), enemy);
-    }
-    public void updateEnemyFromEvent(ScannedRobotEvent e){
-        updateEnemy(new EnemyBot(e));
+    public void addEnemy(EnemyBot enemy ){
+        enemies.put(enemy.getName(), enemy);
+        switch(enemy.getRole()){
+            case "leader":
+                break;
+            case "droid":
+                this.droidsAlive++;
+                break;
+            case "robot":
+                this.robotsAlive++;
+                break;
+        }
     }
     public void updateEnemy(EnemyBot enemy){
         //TODO: Update instead of Replace
-        this.enemies.replace(enemy.getName(), enemy);
+        EnemyBot bot = this.enemies.get(enemy.getName());
+        bot.setLastRecordedHealth(enemy.getLastRecordedHealth());
+        bot.addPosition(enemy.getRecordedPositions().get(0));
+
+//        this.enemies.replace(enemy.getName(), enemy);
     }
     public void enemyDied(EnemyBot enemy){
         if(enemy.getRole().equals("droid")){
@@ -76,10 +87,6 @@ public class EnemyStatistics implements Serializable{
         }else if(enemy.getRole().equals("leader")){
             this.leaderDied();
         }
-    }
-
-    public EnemyStatistics deSerialize(Serializable serializedStats){
-        return null;
     }
 
     public String toString(){
