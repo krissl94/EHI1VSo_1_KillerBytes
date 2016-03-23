@@ -77,7 +77,6 @@ public class Leader extends KillerByte {
             for(Map.Entry<String,EnemyBot> entry: enemyStats.getEnemies().entrySet()) {
                 EnemyBot enemy = entry.getValue();
                 ArrayList<double[]> positions = enemy.getRecordedPositions();
-
                 if(positions.size() > 0){
                     for (double[] position : positions) {
                         // TODO : Check functionality after fixing position registration. (this should work)
@@ -85,15 +84,16 @@ public class Leader extends KillerByte {
                             // change color of square to red if it's the last entry
                             if (position[0] == positions.get(positions.size() - 1)[0] && position[1] == positions.get(positions.size() - 1)[1]) {
                                 g.setColor(Color.RED);
+                                // display text; X,Y
+                                g.drawString(String.valueOf(position[0]) + "," + String.valueOf(position[1]), (int) position[0], (int) position[1] - 10);
+                                // display text; bot name;
+                                g.drawString(entry.getKey(), (int) (position[0] - (entry.getKey().length())), (int) (position[1] + 10));
                             }// else set color to CYAN (light blue)
                             else {
                                 g.setColor(Color.CYAN);
                             }
                             g.drawRect((int) position[0], (int) position[1], 10, 10);
-                            // display text; X,Y
-                            g.drawString(String.valueOf(position[0]) + "," + String.valueOf(position[1]), (int) position[0], (int) position[1] - 10);
-                            // display text; bot name;
-                            g.drawString(entry.getKey(), (int) (position[0] - (entry.getKey().length())), (int) (position[1] + 10));
+
                         }
                     }
                 }

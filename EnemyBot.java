@@ -58,8 +58,8 @@ public class EnemyBot implements Serializable{
         return recordedPositions;
     }
 
-    public void addPosition(ScannedRobotEvent targetTank){
-        //recordedPositions.add(determinePosition(targetTank));
+    public void addPosition(double[] xy){
+        recordedPositions.add(xy);
     }
 
     private String determineRole(double energy){
