@@ -97,7 +97,7 @@ public class Leader extends KillerByte {
                 g.drawOval((int) ally.getX() - 600, (int) ally.getY() - 600, 1200, 1200);
 
                 //draw labels on each sides of the circle.
-                g.drawString("ScanRange",(float)ally.getX()-600,(float)ally.getY());
+                g.drawString("ScanRange",(int)ally.getX()-600,(int)ally.getY());
                 g.drawString("ScanRange",(int)ally.getX(),(int)ally.getY()-600);
                 g.drawString("ScanRange",(int)ally.getX(),(int)ally.getY()+600);
                 g.drawString("ScanRange",(int)ally.getX()+600,(int)ally.getY());
