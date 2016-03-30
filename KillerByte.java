@@ -162,7 +162,7 @@ public class KillerByte extends TeamRobot implements Serializable {
         if(role != "droid"){
             //Set
             //my radar needs to lock on to the target.
-            double radarPosition = normalRelativeAngleDegrees(getAngle(coords[0], coords[1]));
+            double radarPosition = normalRelativeAngleDegrees(getAngle(coords));
             setTurnRadarRight(radarPosition);
 
             double directionToTarget = getHeading() - getGunHeading();
@@ -182,7 +182,7 @@ public class KillerByte extends TeamRobot implements Serializable {
         double y = coords[1];
 
 	/* Calculate the turn required to get there */
-        double angleToTarget = getAngle(x, y);
+        double angleToTarget = getAngle(coords);
         double targetAngle = Utils.normalRelativeAngle(angleToTarget - getHeadingRadians());
 
         //Stelling v pythagoras
@@ -190,20 +190,32 @@ public class KillerByte extends TeamRobot implements Serializable {
         double distanceToEnemyY = Math.abs(y);
         double distance = Math.sqrt((Math.pow(distanceToEnemyX, 2) + Math.pow(distanceToEnemyY, 2)));
 
-	/* This is a simple method of performing set front as back */
+        if(false){
+            System.out.println("Starting circle manouver");
+            //System.out.println(enemyStats.getTargetName());
+            circleTarget(targetAngle, distance);
+        }
+
+        System.out.println(targetAngle);
         double turnAngle = Math.atan(Math.tan(targetAngle));
         setTurnRightRadians(turnAngle);
-        if(targetAngle == turnAngle) {
+
+        if(targetAngle == turnAngle){
             setAhead(distance);
         }
-        else {
-            setTurnRight(180);
+        else{
+            setBack(distance);
         }
+
+	/* This is a simple method of performing set front as back */
+        if(distance > 10) setAhead(10);
     }
 
-    public void moveTo(double x, double y){
+    public void moveTo(double[] coords){
         //TODO: X and Y are coordinates the robot should drive to
         //TODO: Calculate which way to drive
+        double x = coords[0];
+        double y = coords[1];
 
         double myX = getX();
 //        System.out.println("My X = " + myX);
@@ -211,7 +223,7 @@ public class KillerByte extends TeamRobot implements Serializable {
 //        System.out.println("My Y = " + myY);
 //
 //        Double target = getAngle(x, y);.
-        double angleToTarget = getAngle(x, y);
+        double angleToTarget = getAngle(new double[]{x,y});
         double target = Utils.normalRelativeAngle(angleToTarget - getHeadingRadians());
         System.out.println("Relative Angle = " + target);
 
@@ -230,49 +242,44 @@ public class KillerByte extends TeamRobot implements Serializable {
         double distanceToEnemyY = Math.abs(myY - y);
         double distanceToEnemy = Math.sqrt((Math.pow(distanceToEnemyX, 2) + Math.pow(distanceToEnemyY, 2)));
 
-        if(distanceToEnemy < 100){
-            circleTarget(angleToTarget);
-            return;
+        if(false){
+            System.out.println("Starting circle manouver");
+            //System.out.println(enemyStats.getTargetName());
+            circleTarget(angleToTarget, distanceToEnemy);
         }
+        else {
+            if ((Math.abs(heading) + Math.abs(target) <= 180) && target < 0) {
+                setTurnLeft(Math.abs(heading) + Math.abs(target));
+                System.out.println("1. Turns Left");
+            } else if ((Math.abs(heading) + Math.abs(target) <= 180) && target > 0) {
+                setTurnRight(Math.abs(heading) + Math.abs(target));
+                System.out.println("2. Turns Right");
+            } else if ((Math.abs(heading) + Math.abs(target) > 180 && target > 0)) {
+                setTurnLeft((180 - Math.abs(heading) + (180 - Math.abs(target))));
+                System.out.println("3. Turns Left");
+            } else if (Math.abs(heading) + Math.abs(target) > 180 && target < 0) {
+                setTurnRight((180 - Math.abs(heading) + (180 - Math.abs(target))));
+                System.out.println("4. Turns Right");
+            } else {
+                System.out.println("Something went wrong");
+            }
 
-
-        if ((Math.abs(heading) + Math.abs(target) <= 180) && target < 0) {
-            setTurnLeft(Math.abs(heading) + Math.abs(target));
-            System.out.println("1. Turns Left");
-        } else if ((Math.abs(heading) + Math.abs(target) <= 180) && target > 0) {
-            setTurnRight(Math.abs(heading) + Math.abs(target));
-            System.out.println("2. Turns Right");
-        } else if ((Math.abs(heading) + Math.abs(target) > 180 && target > 0)) {
-            setTurnLeft((180 - Math.abs(heading) + (180 - Math.abs(target))));
-            System.out.println("3. Turns Left");
-        } else if (Math.abs(heading) + Math.abs(target) > 180 && target < 0) {
-            setTurnRight((180 - Math.abs(heading) + (180 - Math.abs(target))));
-            System.out.println("4. Turns Right");
-        } else {
-            System.out.println("Something went wrong");
+            if (getTurnRemaining() < 10) {
+                setAhead(distanceToEnemy);
+            }
         }
-
-        if(getTurnRemaining() < 10) {
-            setAhead(distanceToEnemy);
-        }
-
     }
 
-    private void circleTarget(double angleToTarget) {
+    private void circleTarget(double angleToTarget,double distanceToTarget) {
         Double tankTurn;
-        if(movementDirection == 1){
-            System.out.println("Too Close");
-            // Circle around it.
-            tankTurn = Utils.normalRelativeAngleDegrees(angleToTarget +80);
-            System.out.println(tankTurn);
-        }
-        else{
-            tankTurn = Utils.normalRelativeAngleDegrees(angleToTarget +100);
-            System.out.println(tankTurn);
-        }
+
+        System.out.println("Too Close");
+        // Circle around it.
+        tankTurn = (angleToTarget +80);
+        System.out.println(tankTurn);
+
         setTurnRight(tankTurn);
-        if(getTurnRemaining() < 10){
-        }
+        setAhead(100);
     }
 
     /**

@@ -27,12 +27,15 @@ public class RobotOne extends KillerByte implements Serializable {
 
         while(true){
             //TODO: Every tick, a robot reports itself to the leader
-            if(allyStats != null) {
-                reportTo(allyStats.getLeader());
-            }
-            setTurnRadarLeft(360);
 
-            attack();
+            goTo(new double[]{getBattleFieldWidth()/2,getBattleFieldHeight()/2});
+
+//            if(allyStats != null) {
+//                reportTo(allyStats.getLeader());
+//            }
+//            setTurnRadarLeft(360);
+//
+//            attack();
 
             execute();
         }
