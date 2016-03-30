@@ -20,8 +20,6 @@ public class KillerByte extends TeamRobot implements Serializable {
     public String role;
     public AllyStatistics allyStats = null;
     public EnemyStatistics enemyStats = null;
-    public EnemyBot enemyBot;
-    int movementDirection = 1;
     Boolean isLeader = false;
 
     public void init(){
@@ -61,20 +59,20 @@ public class KillerByte extends TeamRobot implements Serializable {
      * We should be able to track every robot's energy, so we should also be able to check when a shot is fired.
      * Because everyone on the field, the entire team needs to dodge
      */
-    public void dodgeAttack(ScannedRobotEvent e){
-        //turn to right angle so dodging is easier
-        setTurnRight(e.getBearing()+90-30*movementDirection);
-
-        //if enemy has small energy drop assume bullet has been fired
-        double changeInEnergy = enemyBot.getFirstRecordedHealth() - enemyBot.getLastRecordedHealth();
-        if(changeInEnergy > 0 && changeInEnergy <=3){
-            //dodge the bullet
-
-            //movementDirection = -movementDirection;
-            //movementDirection is -1 now, the -1 in setAhead should have been movementDirection
-            setAhead((e.getDistance()/4+25)-1);
-        }
-    }
+//    public void dodgeAttack(ScannedRobotEvent e){
+//        //turn to right angle so dodging is easier
+//        setTurnRight(e.getBearing()+90-30*movementDirection);
+//
+//        //if enemy has small energy drop assume bullet has been fired
+//        double changeInEnergy = enemyBot.getFirstRecordedHealth() - enemyBot.getLastRecordedHealth();
+//        if(changeInEnergy > 0 && changeInEnergy <=3){
+//            //dodge the bullet
+//
+//            //movementDirection = -movementDirection;
+//            //movementDirection is -1 now, the -1 in setAhead should have been movementDirection
+//            setAhead((e.getDistance()/4+25)-1);
+//        }
+//    }
 
     /**
      * Function that keeps robots from crashing into the walls
@@ -178,7 +176,6 @@ public class KillerByte extends TeamRobot implements Serializable {
         }
         setFire(3);
     }
-
 
     public void goTo(double[] coords) {
         double x = coords[0];
@@ -284,15 +281,15 @@ public class KillerByte extends TeamRobot implements Serializable {
      * @param y
      * @return the angle between 2 points. Result is -180 to +180. -160 is a left turn, +160 is a right turn
      */
-    private double getAngle(double x, double y){
+    private double getAngle(double[] coords){// x, double y){
 //        double lon1 = getY();
 //        double lat1 = getX();
 //
 //        return normalRelativeAngleDegrees(Math.toDegrees(Math.atan2(lon2-lon1, lat2-lat1)));
 
         /* Transform our coordinates into a vector */
-        x = x -  getX();
-        y = y -  getY();
+        double x = coords[0] -  getX();
+        double y = coords[1] -  getY();
 
         return Math.atan2(x, y);
 
@@ -419,6 +416,19 @@ public class KillerByte extends TeamRobot implements Serializable {
         }
     }
 
+
+    public void attack(){
+        if(enemyStats != null && enemyStats.getTargetName() != null) {
+            if(enemyStats.getEnemies().get(enemyStats.getTargetName()) != null){
+                moveTo(enemyStats.getEnemies().get(enemyStats.getTargetName()).getLastRecordedPosition());//This could be null, that means that the target has died but not updated yet, if that's the case, force update the
+                shootAt(enemyStats.getEnemies().get(enemyStats.getTargetName()).getLastRecordedPosition());
+            }
+        }else{
+            //Wait for new target?
+        }
+    }
+
+
     public void onRobotDeath(RobotDeathEvent e){
         if(isLeader){
             if(e.getName().startsWith("EHI1VSo_1_KillerBytes")){
@@ -437,17 +447,6 @@ public class KillerByte extends TeamRobot implements Serializable {
                 enemyStats.enemyDied(enemyStats.getEnemies().get(e.getName()));
             }
             broadcastStats(enemyStats);
-        }
-    }
-
-    public void attack(){
-        if(enemyStats != null && enemyStats.getTargetName() != null) {
-            if(enemyStats.getEnemies().get(enemyStats.getTargetName()) != null){
-                goTo(enemyStats.getEnemies().get(enemyStats.getTargetName()).getLastRecordedPosition());//This could be null, that means that the target has died but not updated yet, if that's the case, force update the
-                shootAt(enemyStats.getEnemies().get(enemyStats.getTargetName()).getLastRecordedPosition());
-            }
-        }else{
-            //Wait for new target?
         }
     }
 
