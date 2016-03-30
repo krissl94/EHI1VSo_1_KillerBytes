@@ -4,6 +4,7 @@ import robocode.*;
 import robocode.util.Utils;
 import sun.plugin2.message.Message;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.io.Serializable;
@@ -461,6 +462,13 @@ public class KillerByte extends TeamRobot implements Serializable {
     }
 
 
+    public void randomColor(){
+        //random colors
+        Random random = new Random();
+        this.setColors(Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()), Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()), Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()));
+    }
+
+
     public void attack(){
         if(enemyStats != null && enemyStats.getTargetName() != null) {
             if(enemyStats.getEnemies().get(enemyStats.getTargetName()) != null){
@@ -470,7 +478,10 @@ public class KillerByte extends TeamRobot implements Serializable {
         }else{
             //Wait for new target?
         }
+
+
     }
+
 
 
     public void onRobotDeath(RobotDeathEvent e){

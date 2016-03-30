@@ -14,6 +14,7 @@ public class Droid extends KillerByte implements Serializable, robocode.Droid {
         init();
 
         while(true){
+            randomColor();
             if(allyStats != null) {
                 reportTo(allyStats.getLeader());
             }

@@ -34,8 +34,9 @@ public class Leader extends KillerByte {
         while(true){
             // SET RANDOM COLORS
             System.out.println(enemyStats.toString());
-            Random random = new Random();
-            this.setColors(Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()), Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()), Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()));
+            randomColor();
+            /*Random random = new Random();
+            this.setColors(Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()), Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()), Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()));*/
 
             setTurnRadarRight(360);
             smartShooting();
