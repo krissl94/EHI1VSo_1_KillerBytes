@@ -190,11 +190,6 @@ public class KillerByte extends TeamRobot implements Serializable {
         double distanceToEnemyY = Math.abs(y);
         double distance = Math.sqrt((Math.pow(distanceToEnemyX, 2) + Math.pow(distanceToEnemyY, 2)));
 
-        if(false){
-            System.out.println("Starting circle manouver");
-            //System.out.println(enemyStats.getTargetName());
-            circleTarget(targetAngle, distance);
-        }
 
         System.out.println(targetAngle);
         double turnAngle = Math.atan(Math.tan(targetAngle));
@@ -208,7 +203,6 @@ public class KillerByte extends TeamRobot implements Serializable {
         }
 
 	/* This is a simple method of performing set front as back */
-        if(distance > 10) setAhead(10);
     }
 
     public void moveTo(double[] coords){
