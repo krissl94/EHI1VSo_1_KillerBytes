@@ -74,7 +74,14 @@ public class KillerByte extends TeamRobot implements Serializable {
         //Calculate future X and Y of target
         double futureX = enemeyAdv.getFutureX(time);
         double futureY = enemeyAdv.getFutureY(time);
-        double absDeg = absoluteBearing(getX(), getY(), futureX, futureY);
+
+        double absDeg = 0;
+        if(enemeyAdv.getVelocity() == 0){
+            absDeg = absoluteBearing(getX(),getY(),enemeyAdv.getX(),enemeyAdv.getY());
+        }
+        else{
+            absDeg = absoluteBearing(getX(), getY(), futureX, futureY);
+        }
 
         setTurnGunRight(normalizeBearing(absDeg - getGunHeading()));
 
@@ -144,6 +151,11 @@ public class KillerByte extends TeamRobot implements Serializable {
 
     @Override
     public void onHitWall(HitWallEvent event) {
+        reverseDirection();
+    }
+
+    @Override
+    public void onHitRobot(HitRobotEvent event) {
         reverseDirection();
     }
 
@@ -336,7 +348,7 @@ public class KillerByte extends TeamRobot implements Serializable {
 
         System.out.println("Too Close");
         // Circle around it.
-        if(distanceToTarget > 100){
+        if(movedir == 1){
             System.out.println("Too Close");
             // Circle around it.
             tankTurn = Utils.normalRelativeAngleDegrees(enemeyAdv.getBearing() +80);

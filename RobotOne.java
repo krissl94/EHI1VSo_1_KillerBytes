@@ -17,7 +17,7 @@ public class RobotOne extends KillerByte implements Serializable {
     Boolean running = false;
 
     public void run(){
-
+        init();
         name = getName();
         role = "robot";
         running = true;
@@ -28,6 +28,8 @@ public class RobotOne extends KillerByte implements Serializable {
         while(true){
             //random colors
             randomColor();
+            System.out.println("Target = " + enemyStats.getTargetName());
+            System.out.println("Current Leader = " + allyStats.getLeader());
             //TODO: Every tick, a robot reports itself to the leader
             if(allyStats != null)
                 reportTo(allyStats.getLeader());
