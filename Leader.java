@@ -17,12 +17,17 @@ import java.util.Random;
  * Created by kris on 9-3-16.
  */
 public class Leader extends KillerByte {
+
+    private AdvancedEnemyBot enemyRobot = new AdvancedEnemyBot();
+
     public void run(){
         isLeader = true;
         init();
         setAdjustGunForRobotTurn(true);
         setAdjustRadarForGunTurn(true);
         setAdjustRadarForRobotTurn(true);
+        enemyRobot.reset(); //Testing predictive shooting
+        setTurnRadarRight(360); // Testing predictive shooting
 
         //TODO: Broadcast an initialized object
         broadcastStats(allyStats);
@@ -31,7 +36,9 @@ public class Leader extends KillerByte {
             System.out.println(enemyStats.toString());
             Random random = new Random();
             this.setColors(Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()), Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()), Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()));
-            setTurnRadarLeft(360);
+
+            setTurnRadarRight(360);
+            smartShooting();
 
             System.out.println("tick");
             execute();

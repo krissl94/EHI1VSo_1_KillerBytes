@@ -36,6 +36,13 @@ public class RobotOne extends KillerByte implements Serializable {
 //            setTurnRadarLeft(360);
 //
 //            attack();
+            if(allyStats != null) {
+                reportTo(allyStats.getLeader());
+            }
+            setTurnRadarLeft(360);
+            setTurnRadarRight(360);
+            smartShooting();
+            attack();
 
             execute();
         }

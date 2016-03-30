@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * Created by kris on 9-3-16.
  */
 public class EnemyBot implements Serializable{
-    private String name;
+    //private String name;
     private double firstRecordedHealth;
     private double lastRecordedHealth;
     private String role;
@@ -108,4 +108,88 @@ public class EnemyBot implements Serializable{
     //public EnemyBot(ScannedRobotEvent e) {
 
     //}
+
+
+    // Testing predictive shooting with AdvancedEnemyBot
+
+    private double bearing;
+    private double distance;
+    private double energy;
+    private double heading;
+    private String name;
+    private double velocity;
+
+    public double getBearing() {
+        return bearing;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public double getEnergy() {
+        return energy;
+    }
+
+    public double getHeading() {
+        return heading;
+    }
+
+    public double getVelocity() {
+        return velocity;
+    }
+
+    public void setBearing(double bearing) {
+        this.bearing = bearing;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
+    public void setEnergy(double energy) {
+        this.energy = energy;
+    }
+
+    public void setHeading(double heading) {
+        this.heading = heading;
+    }
+
+    public void setVelocity(double velocity) {
+        this.velocity = velocity;
+    }
+
+    public void update(ScannedRobotEvent e){
+        bearing = e.getBearing();
+        distance = e.getDistance();
+        energy = e.getEnergy();
+        heading = e.getHeading();
+        name = e.getName();
+        velocity = e.getVelocity();
+
+    }
+
+    public void reset(){
+        setName("");
+        setBearing(0.0);
+        setDistance(0.0);
+        setEnergy(0.0);
+        setHeading(0.0);
+        setVelocity(0.0);
+
+    }
+
+    public boolean none(){
+        if (name.equals("")){
+            return true;
+        } else{
+            return false;
+        }
+    }
+
+    public EnemyBot(){
+        reset();
+    }
+
+
 }

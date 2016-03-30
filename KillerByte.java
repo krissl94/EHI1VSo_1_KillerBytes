@@ -4,6 +4,7 @@ import robocode.*;
 import robocode.util.Utils;
 import sun.plugin2.message.Message;
 
+import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -53,6 +54,70 @@ public class KillerByte extends TeamRobot implements Serializable {
         }
         setTurnRadarRight(360);
     }
+
+    private AdvancedEnemyBot enemeyAdv = new AdvancedEnemyBot();
+
+    public void smartShooting(){
+
+        if (enemeyAdv.none()){
+            return;
+        }
+
+        // calculate for bullet
+        double firePower = Math.min(500 / enemeyAdv.getDistance(), 3);
+        double bulletSpeed = 20 - firePower * 3;
+        long time = (long)(enemeyAdv.getDistance() / bulletSpeed);
+
+        //Calculate future X and Y of target
+        double futureX = enemeyAdv.getFutureX(time);
+        double futureY = enemeyAdv.getFutureY(time);
+        double absDeg = absoluteBearing(getX(), getY(), futureX, futureY);
+
+        setTurnGunRight(normalizeBearing(absDeg - getGunHeading()));
+
+        if (getGunHeat() == 0 && Math.abs(getGunTurnRemaining()) < 10){
+            setFire(firePower);
+        }
+
+    }
+
+    public double absoluteBearing(double x1, double y1, double x2, double y2){
+        double xo = x2 - x1;
+        double yo = y2 - y1;
+        double hyp = Point2D.distance(x1, y1, x2, y2);
+        double arcSin = Math.toDegrees(Math.asin(xo / hyp));
+        double bearing = 0;
+
+        if (xo > yo && yo > 0) {
+            // lower left
+            bearing = arcSin;
+        } else if (xo < 0 && yo > 0) {
+            // lower right
+            bearing = 360 + arcSin;
+        } else if (xo > 0 && yo < 0) {
+            // upper left
+            bearing = 180 - arcSin;
+        } else if (xo < 0 && yo < 0) {
+            // upper right
+            bearing = 180 - arcSin;
+        }
+
+        return bearing;
+    }
+
+    public double normalizeBearing(double angle){
+
+        while (angle > 180){
+            angle -= 360;
+        }
+        while (angle < -180){
+            angle += 360;
+        }
+
+        return angle;
+    }
+
+
 
     /**
      * Function that instructs all bots to avoid attacks
@@ -278,8 +343,8 @@ public class KillerByte extends TeamRobot implements Serializable {
 
     /**
      *
-     * @param x
-     * @param y
+     * //@param x
+     * //@param y
      * @return the angle between 2 points. Result is -180 to +180. -160 is a left turn, +160 is a right turn
      */
     private double getAngle(double[] coords){// x, double y){
