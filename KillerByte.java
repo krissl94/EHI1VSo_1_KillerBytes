@@ -32,33 +32,6 @@ public class KillerByte extends TeamRobot implements Serializable {
         enemyStats = new EnemyStatistics();
     }
 
-    /**
-     * Move randomly across the field when there is no target or specific instruction
-     */
-    public void goCrazy(){
-        Random rand = new Random();
-        setTurnRadarRight(360);
-
-        if (rand.nextInt(2) == 0) {
-            //Go backward
-            if (getDistanceRemaining() < 10) {
-                setBack(100);
-                setTurnRadarRight(360);
-                setTurnRight(40);
-            }
-        } else {
-            //Go forward
-            if (getDistanceRemaining() < 10) {
-
-                setAhead(100);
-                setTurnRadarRight(360);
-
-                setTurnRight(50);
-            }
-        }
-        setTurnRadarRight(360);
-    }
-
     public void smartShooting(){
 
         if (enemeyAdv.none()){
@@ -126,28 +99,6 @@ public class KillerByte extends TeamRobot implements Serializable {
         return angle;
     }
 
-
-
-    /**
-     * Function that instructs all bots to avoid attacks
-     * We should be able to track every robot's energy, so we should also be able to check when a shot is fired.
-     * Because everyone on the field, the entire team needs to dodge
-     */
-//    public void dodgeAttack(ScannedRobotEvent e){
-//        //turn to right angle so dodging is easier
-//        setTurnRight(e.getBearing()+90-30*movementDirection);
-//
-//        //if enemy has small energy drop assume bullet has been fired
-//        double changeInEnergy = enemyBot.getFirstRecordedHealth() - enemyBot.getLastRecordedHealth();
-//        if(changeInEnergy > 0 && changeInEnergy <=3){
-//            //dodge the bullet
-//
-//            //movementDirection = -movementDirection;
-//            //movementDirection is -1 now, the -1 in setAhead should have been movementDirection
-//            setAhead((e.getDistance()/4+25)-1);
-//        }
-//    }
-
     @Override
     public void onHitWall(HitWallEvent event) {
         reverseDirection();
@@ -160,15 +111,6 @@ public class KillerByte extends TeamRobot implements Serializable {
 
     private void reverseDirection(){
         movedir = movedir *-1;
-    }
-
-    /**
-     * Function that keeps robots from crashing into the walls
-     */
-
-
-    public void wallSafe(){
-        //Gerton had toch iets voor walls enzo?
     }
 
     /**
@@ -281,65 +223,6 @@ public class KillerByte extends TeamRobot implements Serializable {
         setAhead(distance * movedir);
 
 	/* This is a simple method of performing set front as back */
-    }
-
-    public void moveTo(double[] coords){
-        //TODO: X and Y are coordinates the robot should drive to
-        //TODO: Calculate which way to drive
-        double x = coords[0];
-        double y = coords[1];
-
-        double myX = getX();
-//        System.out.println("My X = " + myX);
-        double myY = getY();
-//        System.out.println("My Y = " + myY);
-//
-//        Double target = getAngle(x, y);.
-        double angleToTarget = getAngle(new double[]{x,y});
-        double target = Utils.normalRelativeAngle(angleToTarget - getHeadingRadians());
-        System.out.println("Relative Angle = " + target);
-
-        double heading = 0;
-        if (getHeading() > 180) {
-            heading = -360 + getHeading();
-            System.out.println("> 180 My heading = " + heading);
-        } else if (getHeading() <= 180) {
-            heading = getHeading();
-            System.out.println("< 180 My heading = " + heading);
-        }
-
-        System.out.println("Absolute Angle = " + Math.abs(heading) + Math.abs(target));
-        //moveTo(distanceToEnemy)
-        double distanceToEnemyX = Math.abs(myX -x);
-        double distanceToEnemyY = Math.abs(myY - y);
-        double distanceToEnemy = Math.sqrt((Math.pow(distanceToEnemyX, 2) + Math.pow(distanceToEnemyY, 2)));
-    
-        if(false){
-            System.out.println("Starting circle manouver");
-            //System.out.println(enemyStats.getTargetName());
-            circleTarget(angleToTarget, distanceToEnemy);
-        }
-        else {
-            if ((Math.abs(heading) + Math.abs(target) <= 180) && target < 0) {
-                setTurnLeft(Math.abs(heading) + Math.abs(target));
-                System.out.println("1. Turns Left");
-            } else if ((Math.abs(heading) + Math.abs(target) <= 180) && target > 0) {
-                setTurnRight(Math.abs(heading) + Math.abs(target));
-                System.out.println("2. Turns Right");
-            } else if ((Math.abs(heading) + Math.abs(target) > 180 && target > 0)) {
-                setTurnLeft((180 - Math.abs(heading) + (180 - Math.abs(target))));
-                System.out.println("3. Turns Left");
-            } else if (Math.abs(heading) + Math.abs(target) > 180 && target < 0) {
-                setTurnRight((180 - Math.abs(heading) + (180 - Math.abs(target))));
-                System.out.println("4. Turns Right");
-            } else {
-                System.out.println("Something went wrong");
-            }
-
-            if (getTurnRemaining() < 10) {
-                setAhead(distanceToEnemy);
-            }
-        }
     }
 
     private void circleTarget(double angleToTarget,double distanceToTarget) {
