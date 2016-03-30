@@ -52,4 +52,7 @@ public class AllyStatistics implements Serializable{
 
     }
 
+    public void allyDied(AllyBot allyBot) {
+        allies.remove(allyBot.getName());
+    }
 }

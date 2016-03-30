@@ -188,27 +188,12 @@ public class KillerByte extends TeamRobot implements Serializable {
     }
 
     public double[] calculateCoordinates(ScannedRobotEvent e){
-        double myX = getX();
-        System.out.println("My X = " + myX);
-        double myY = getY();
-        System.out.println("My Y = " + myY);
-
-        double enemyDistance = e.getDistance();
-        System.out.println("Enemy distance = " + enemyDistance);
-        double enemyBearing = e.getBearingRadians();
-        System.out.println("Enemy bearing = " + enemyBearing);
-
         double absoluteBearing = getHeadingRadians() + e.getBearingRadians();
-        double enemyX = myX + (enemyDistance * Math.sin(absoluteBearing));
-        double enemyY = myY + (enemyDistance * Math.cos(absoluteBearing));
 
-        System.out.println("Enemy " + e.getName() +" X = " + enemyX);
-        System.out.println("Enemy " + e.getName() +"Y = " + enemyY);
+        double enemyX = getX() + (e.getDistance() * Math.sin(absoluteBearing));
+        double enemyY = getY() + (e.getDistance() * Math.cos(absoluteBearing));
+
         return new double[]{enemyX, enemyY};
-// Follow enemy robot & shoot
-        //turnRightRadians(e.getBearingRadians());
-        //setAhead(enemyDistance);
-        //fire(2);
     }
 
     public void setFire(ScannedRobotEvent target, double power){
@@ -348,17 +333,10 @@ public class KillerByte extends TeamRobot implements Serializable {
      * @return the angle between 2 points. Result is -180 to +180. -160 is a left turn, +160 is a right turn
      */
     private double getAngle(double[] coords){// x, double y){
-//        double lon1 = getY();
-//        double lat1 = getX();
-//
-//        return normalRelativeAngleDegrees(Math.toDegrees(Math.atan2(lon2-lon1, lat2-lat1)));
-
-        /* Transform our coordinates into a vector */
-        double x = coords[0] -  getX();
-        double y = coords[1] -  getY();
+        double x = coords[0] - getX();
+        double y = coords[1] - getY();
 
         return Math.atan2(x, y);
-
     }
 
     /**
@@ -426,21 +404,9 @@ public class KillerByte extends TeamRobot implements Serializable {
      * e can be allyStats, enemyStats (optionally: [or a request to register to the Leader]).
      */
     private void robotProcessData(MessageEvent e){
-        //Robots and droids that aren't leaders dont do much with received messages, just register it to their own memory
         if(e.getMessage() instanceof AllyStatistics){
             this.allyStats = (AllyStatistics)e.getMessage();
-            System.out.println("Is an allystats thing");
-            if (!((AllyStatistics) e.getMessage()).getAllies().containsKey(this.getName())) {
-                //This is only going to happen once. It's the leader requesting me to register.
-                System.out.println("I'm not registered yet");
-//                sendMsg(((AllyStatistics) e.getMessage()).getLeader(), this);
-            }
         } else if(e.getMessage() instanceof EnemyStatistics){
-            System.out.println("Leader sent me new info! D:");
-            //Lots of shit is gonna go down.
-            //Recalculate route
-            //Check if there's a new target in town
-            //Perform some general checks.
             this.enemyStats = (EnemyStatistics) e.getMessage();
         }
     }
@@ -452,32 +418,20 @@ public class KillerByte extends TeamRobot implements Serializable {
      * e can either be a friendly bot, or an enemy
      */
     private void leaderProcessData(MessageEvent e){
-        //Leader receives the following messages:
-        //  - Ally stats
-        //  - Enemy stats
-        System.out.println("I received a message from "+ e.getSender());
         if(e.getMessage() instanceof AllyBot){
-            System.out.println("Is ally data!");
             if (!(allyStats.getAllies().containsKey(e.getSender()))) {
-                System.out.println("He's not registered yet!");
                 allyStats.addAlly((AllyBot) e.getMessage());
             } else {
-                System.out.println("He's registered already! Updating..");
                 allyStats.updateAlly((AllyBot) e.getMessage());
             }
-            //Allies were updated, so i should broadcast the new object
             broadcastStats(allyStats);
         } else if (e.getMessage() instanceof EnemyBot && !(((EnemyBot) e.getMessage()).getName().startsWith("EHI1VSo_1_"))) {
-            System.out.println("Is enemy data!");
             EnemyBot enemyBot = (EnemyBot) e.getMessage();
             if (!(enemyStats.getEnemies().containsKey(enemyBot.getName()))) {
-                System.out.println("This enemy's not registered yet!");
                 enemyStats.addEnemy(enemyBot);
             } else {
-                System.out.println("This enemy is registered, but i need to update him");
                 enemyStats.updateEnemy(enemyBot);
             }
-            //Enemies were updated, so i should broadcast the new object
             broadcastStats(enemyStats);
         }
     }
@@ -496,23 +450,30 @@ public class KillerByte extends TeamRobot implements Serializable {
 
 
     public void onRobotDeath(RobotDeathEvent e){
-        if(isLeader){
-            if(e.getName().startsWith("EHI1VSo_1_KillerBytes")){
-                //Ally died
-                if(e.getName().equals(allyStats.getLeader())){
-                    if(role.equals("robot")){
-                        if(this.getEnergy() > allyStats.getOtherRobot(getName()).getEnergy() ){
+        if(!isLeader){
+            if(e.getName().startsWith("EHI1VSo_1_KillerBytes")){//Ally died
+                if(e.getName().equals(allyStats.getLeader())){//Leader died
+                    if(role.equals("robot")){//I'm a robot
+                        if(this.getEnergy() > allyStats.getOtherRobot(getName()).getEnergy() ){//My energy is higher than the other Robot's energy. I will take over the leader role
                             isLeader = true;
-                            System.out.println("I am the new leader");
+                            allyStats.setLeader(name);
+                            allyStats.allyDied(allyStats.getAlly(e.getName()));
+                            broadcastStats(allyStats);
                         }
                     }
                 }
             }
-            else{
-                //Enemy died
-                enemyStats.enemyDied(enemyStats.getEnemies().get(e.getName()));
+        }
+        else{//I'm the leader and i obviously didn't die.
+            if(e.getName().startsWith("EHI1VSo_1_KillerBytes")){//Ally died
+                allyStats.allyDied(allyStats.getAllies().get(e.getName()));
+                broadcastStats(allyStats);
             }
-            broadcastStats(enemyStats);
+            else{  //Enemy died
+                enemyStats.enemyDied(enemyStats.getEnemies().get(e.getName()));
+                broadcastStats(enemyStats);
+            }
+
         }
     }
 
