@@ -45,6 +45,7 @@ public class RobotOne extends KillerByte implements Serializable {
             enemeyAdv.update(TargetTank,this);
         }
         System.out.println("I spotted " + TargetTank.getName());
+
         if(!isLeader){
             if(allyStats != null){
                 EnemyBot enemy = new EnemyBot(TargetTank , calculateCoordinates(TargetTank));

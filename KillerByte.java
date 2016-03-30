@@ -14,7 +14,6 @@ import java.util.Random;
 import static robocode.util.Utils.normalAbsoluteAngle;
 import static robocode.util.Utils.normalRelativeAngleDegrees;
 
-
 /**
  * Created by kris on 10-3-16.
  */
@@ -235,7 +234,7 @@ public class KillerByte extends TeamRobot implements Serializable {
         //Calculate line of fire..
         //Gun position is known
         //
-        if(role != "droid"){
+        if(role .equals("droid")){
             //Set
             //my radar needs to lock on to the target.
             double radarPosition = normalRelativeAngleDegrees(getAngle(coords));
@@ -314,7 +313,7 @@ public class KillerByte extends TeamRobot implements Serializable {
         double distanceToEnemyX = Math.abs(myX -x);
         double distanceToEnemyY = Math.abs(myY - y);
         double distanceToEnemy = Math.sqrt((Math.pow(distanceToEnemyX, 2) + Math.pow(distanceToEnemyY, 2)));
-
+    
         if(false){
             System.out.println("Starting circle manouver");
             //System.out.println(enemyStats.getTargetName());
@@ -494,7 +493,12 @@ public class KillerByte extends TeamRobot implements Serializable {
 
     }
 
-
+    @Override
+    public void onWin(WinEvent event) {
+        turnRight(200);
+        turnLeft(200);
+        ahead(0);
+    }
 
     public void onRobotDeath(RobotDeathEvent e){
         if(!isLeader){
