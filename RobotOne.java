@@ -27,27 +27,19 @@ public class RobotOne extends KillerByte implements Serializable {
 
         while(true){
             //TODO: Every tick, a robot reports itself to the leader
-
-            goTo(new double[]{getBattleFieldWidth()/2,getBattleFieldHeight()/2});
-
-//            if(allyStats != null) {
-//                reportTo(allyStats.getLeader());
-//            }
-//            setTurnRadarLeft(360);
-//
-//            attack();
-            if(allyStats != null) {
+            if(allyStats != null)
                 reportTo(allyStats.getLeader());
-            }
-            setTurnRadarLeft(360);
+            attack();
             setTurnRadarRight(360);
             smartShooting();
-            attack();
-
             execute();
         }
     }
     public void onScannedRobot(ScannedRobotEvent TargetTank){
+        if(TargetTank.getName().equals(enemyStats.getTargetName())){
+            System.out.println("YES I NEED UPDATE PLS");
+            enemeyAdv.update(TargetTank,this);
+        }
         System.out.println("I spotted " + TargetTank.getName());
         if(!isLeader){
             if(allyStats != null){

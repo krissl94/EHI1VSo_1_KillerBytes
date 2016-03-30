@@ -36,6 +36,10 @@ public class RobotTwo extends KillerByte implements Serializable{
 
 
     public void onScannedRobot(ScannedRobotEvent TargetTank){
+        if(TargetTank.getName().equals(enemyStats.getTargetName())){
+            System.out.println("YES I NEED UPDATE PLS");
+            enemeyAdv.update(TargetTank,this);
+        }
         System.out.println("I spotted " + TargetTank.getName());
         if(!isLeader){
             if(allyStats != null){

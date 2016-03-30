@@ -13,6 +13,7 @@ import java.util.Random;
 import static robocode.util.Utils.normalAbsoluteAngle;
 import static robocode.util.Utils.normalRelativeAngleDegrees;
 
+
 /**
  * Created by kris on 10-3-16.
  */
@@ -21,13 +22,16 @@ public class KillerByte extends TeamRobot implements Serializable {
     public String role;
     public AllyStatistics allyStats = null;
     public EnemyStatistics enemyStats = null;
-    Boolean isLeader = false;
+    public AdvancedEnemyBot enemeyAdv = new AdvancedEnemyBot();
+    public float movedir = 1;
 
+    Boolean isLeader = false;
     public void init(){
         allyStats = new AllyStatistics("EHI1VSo_1_KillerBytes.Leader");
         allyStats.addAlly(new AllyBot(this));
         enemyStats = new EnemyStatistics();
     }
+
     /**
      * Move randomly across the field when there is no target or specific instruction
      */
@@ -54,8 +58,6 @@ public class KillerByte extends TeamRobot implements Serializable {
         }
         setTurnRadarRight(360);
     }
-
-    private AdvancedEnemyBot enemeyAdv = new AdvancedEnemyBot();
 
     public void smartShooting(){
 
@@ -139,9 +141,20 @@ public class KillerByte extends TeamRobot implements Serializable {
 //        }
 //    }
 
+    @Override
+    public void onHitWall(HitWallEvent event) {
+        reverseDirection();
+    }
+
+    private void reverseDirection(){
+        movedir = movedir *-1;
+    }
+
     /**
      * Function that keeps robots from crashing into the walls
      */
+
+
     public void wallSafe(){
         //Gerton had toch iets voor walls enzo?
     }
@@ -236,21 +249,24 @@ public class KillerByte extends TeamRobot implements Serializable {
         double targetAngle = Utils.normalRelativeAngle(angleToTarget - getHeadingRadians());
 
         //Stelling v pythagoras
-        double distanceToEnemyX = Math.abs(x);
-        double distanceToEnemyY = Math.abs(y);
+        double distanceToEnemyX = Math.abs(getX() - x);
+        double distanceToEnemyY = Math.abs(getY() - y);
         double distance = Math.sqrt((Math.pow(distanceToEnemyX, 2) + Math.pow(distanceToEnemyY, 2)));
 
+
+        System.out.println(String.valueOf(distance));
+        if(true){
+            System.out.println("yes");
+            System.out.println(String.valueOf(enemeyAdv.getBearing()));
+            circleTarget(angleToTarget, distance);
+            return;
+        }
 
         System.out.println(targetAngle);
         double turnAngle = Math.atan(Math.tan(targetAngle));
         setTurnRightRadians(turnAngle);
 
-        if(targetAngle == turnAngle){
-            setAhead(distance);
-        }
-        else{
-            setBack(distance);
-        }
+        setAhead(distance * movedir);
 
 	/* This is a simple method of performing set front as back */
     }
@@ -319,11 +335,19 @@ public class KillerByte extends TeamRobot implements Serializable {
 
         System.out.println("Too Close");
         // Circle around it.
-        tankTurn = (angleToTarget +80);
-        System.out.println(tankTurn);
+        if(distanceToTarget > 100){
+            System.out.println("Too Close");
+            // Circle around it.
+            tankTurn = Utils.normalRelativeAngleDegrees(enemeyAdv.getBearing() +80);
+            System.out.println(tankTurn);
+        }
+        else{
+            tankTurn = Utils.normalRelativeAngleDegrees(enemeyAdv.getBearing() +100);
+
+        }
 
         setTurnRight(tankTurn);
-        setAhead(100);
+        setAhead(50*movedir);
     }
 
     /**
@@ -440,7 +464,7 @@ public class KillerByte extends TeamRobot implements Serializable {
     public void attack(){
         if(enemyStats != null && enemyStats.getTargetName() != null) {
             if(enemyStats.getEnemies().get(enemyStats.getTargetName()) != null){
-                moveTo(enemyStats.getEnemies().get(enemyStats.getTargetName()).getLastRecordedPosition());//This could be null, that means that the target has died but not updated yet, if that's the case, force update the
+                goTo(enemyStats.getEnemies().get(enemyStats.getTargetName()).getLastRecordedPosition());//This could be null, that means that the target has died but not updated yet, if that's the case, force update the
                 shootAt(enemyStats.getEnemies().get(enemyStats.getTargetName()).getLastRecordedPosition());
             }
         }else{
