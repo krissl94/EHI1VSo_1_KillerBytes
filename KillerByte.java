@@ -223,7 +223,7 @@ public class KillerByte extends TeamRobot implements Serializable {
         //Calculate line of fire..
         //Gun position is known
         //
-        if(role != "droid"){
+        if(role .equals("droid")){
             //Set
             //my radar needs to lock on to the target.
             double radarPosition = normalRelativeAngleDegrees(getAngle(coords));
@@ -482,7 +482,12 @@ public class KillerByte extends TeamRobot implements Serializable {
 
     }
 
-
+    @Override
+    public void onWin(WinEvent event) {
+        turnRight(200);
+        turnLeft(200);
+        ahead(0);
+    }
 
     public void onRobotDeath(RobotDeathEvent e){
         if(!isLeader){
