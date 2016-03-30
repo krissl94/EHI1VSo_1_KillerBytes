@@ -110,7 +110,7 @@ public class EnemyBot implements Serializable{
     //}
 
 
-    // Testing predictive shooting with AdvancedEnemyBot
+    //Predictive shooting with AdvancedEnemyBot
 
     private double bearing;
     private double distance;

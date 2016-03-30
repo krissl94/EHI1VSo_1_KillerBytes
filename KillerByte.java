@@ -14,7 +14,6 @@ import java.util.Random;
 import static robocode.util.Utils.normalAbsoluteAngle;
 import static robocode.util.Utils.normalRelativeAngleDegrees;
 
-
 /**
  * Created by kris on 10-3-16.
  */
