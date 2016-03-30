@@ -207,6 +207,7 @@ public class KillerByte extends TeamRobot implements Serializable {
     public void moveTo(double x, double y){
         //TODO: X and Y are coordinates the robot should drive to
         //TODO: Calculate which way to drive
+
         double myX = getX();
 //        System.out.println("My X = " + myX);
         double myY = getY();
@@ -229,8 +230,14 @@ public class KillerByte extends TeamRobot implements Serializable {
         System.out.println("Absolute Angle = " + Math.abs(heading) + Math.abs(target));
         //moveTo(distanceToEnemy)
         double distanceToEnemyX = Math.abs(myX -x);
-        double distanceToEnemyY = Math.abs(myY -y);
+        double distanceToEnemyY = Math.abs(myY - y);
         double distanceToEnemy = Math.sqrt((Math.pow(distanceToEnemyX, 2) + Math.pow(distanceToEnemyY, 2)));
+
+        if(distanceToEnemy < 100){
+            circleTarget(angleToTarget);
+            return;
+        }
+
 
         if ((Math.abs(heading) + Math.abs(target) <= 180) && target < 0) {
             setTurnLeft(Math.abs(heading) + Math.abs(target));
@@ -252,6 +259,23 @@ public class KillerByte extends TeamRobot implements Serializable {
             setAhead(distanceToEnemy);
         }
 
+    }
+
+    private void circleTarget(double angleToTarget) {
+        Double tankTurn;
+        if(movementDirection == 1){
+            System.out.println("Too Close");
+            // Circle around it.
+            tankTurn = Utils.normalRelativeAngleDegrees(angleToTarget +80);
+            System.out.println(tankTurn);
+        }
+        else{
+            tankTurn = Utils.normalRelativeAngleDegrees(angleToTarget +100);
+            System.out.println(tankTurn);
+        }
+        setTurnRight(tankTurn);
+        if(getTurnRemaining() < 10){
+        }
     }
 
     /**
