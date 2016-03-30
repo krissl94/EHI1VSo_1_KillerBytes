@@ -489,7 +489,7 @@ public class KillerByte extends TeamRobot implements Serializable {
             if(e.getName().startsWith("EHI1VSo_1_KillerBytes")){//Ally died
                 if(e.getName().equals(allyStats.getLeader())){//Leader died
                     if(role.equals("robot")){//I'm a robot
-                        if(this.getEnergy() > allyStats.getOtherRobot(getName()).getEnergy() ){//My energy is higher than the other Robot's energy. I will take over the leader role
+                        if( allyStats.getOtherRobot(getName()) == null || this.getEnergy() > allyStats.getOtherRobot(getName()).getEnergy() ){//My energy is higher than the other Robot's energy. I will take over the leader role
                             isLeader = true;
                             allyStats.setLeader(name);
                             allyStats.allyDied(allyStats.getAlly(e.getName()));
