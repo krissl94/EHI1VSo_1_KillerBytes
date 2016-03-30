@@ -3,6 +3,7 @@ package EHI1VSo_1_KillerBytes;
 import robocode.MessageEvent;
 import robocode.ScannedRobotEvent;
 import robocode.TeamRobot;
+import robocode.WinEvent;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -57,6 +58,8 @@ public class RobotTwo extends KillerByte implements Serializable{
     public void onMessageReceived(MessageEvent e){
         messageReceived(e);
     }
+
+
 
     public void sendMsg(String name, Serializable msg){
         try{
