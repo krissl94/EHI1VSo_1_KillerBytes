@@ -302,7 +302,7 @@ public class KillerByte extends TeamRobot implements Serializable {
         double distanceToEnemyX = Math.abs(myX -x);
         double distanceToEnemyY = Math.abs(myY - y);
         double distanceToEnemy = Math.sqrt((Math.pow(distanceToEnemyX, 2) + Math.pow(distanceToEnemyY, 2)));
-
+    
         if(false){
             System.out.println("Starting circle manouver");
             //System.out.println(enemyStats.getTargetName());
