@@ -402,6 +402,7 @@ public class KillerByte extends TeamRobot implements Serializable {
     /**
      * Author: Remy
      * TODO: Remy, please explain
+     * if and when we win, peform this small victory dance
      */
     @Override
     public void onWin(WinEvent event) {
