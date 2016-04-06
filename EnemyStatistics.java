@@ -5,11 +5,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EnemyStatistics implements Serializable{
+    //region Variables
     private boolean leaderAlive;
     private int droidsAlive;
     private int robotsAlive;
     private String targetName;
     private Map<String, EnemyBot> enemies;
+    //endregion
 
     public EnemyStatistics() {
         this.leaderAlive = true;
@@ -33,24 +35,16 @@ public class EnemyStatistics implements Serializable{
         return "";
     }
 
+    //region Getters and Setters
     public String getTargetName() {
         return targetName;
     }
 
-    public boolean isLeaderAlive() {
-        return leaderAlive;
-    }
     public void leaderDied() {
         this.leaderAlive = false;
     }
-    public int getDroidsAlive() {
-        return droidsAlive;
-    }
     public void droidDied() {
         this.droidsAlive--;
-    }
-    public int getRobotsAlive() {
-        return robotsAlive;
     }
     public void robotDied() {
         this.robotsAlive--;
@@ -58,6 +52,7 @@ public class EnemyStatistics implements Serializable{
     public Map<String, EnemyBot> getEnemies() {
         return enemies;
     }
+    //endregion
 
     /**
      * Author: Gerton

@@ -1,7 +1,5 @@
 package EHI1VSo_1_KillerBytes;
 
-import robocode.TeamRobot;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;

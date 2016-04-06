@@ -3,13 +3,14 @@ package EHI1VSo_1_KillerBytes;
 import robocode.ScannedRobotEvent;
 
 import java.io.Serializable;
-import java.lang.annotation.Target;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
  * Created by kris on 9-3-16.
  * Updated by Nicky on 30-3-16.
+ * EnemyBot contains some information on the enemy.
+ * Implements Serializable, because it can be sent as a message
+ * TODO: Nicky, please explain your edits
  */
 public class EnemyBot implements Serializable{
     //region Kris' variables

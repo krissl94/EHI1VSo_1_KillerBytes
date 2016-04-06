@@ -3,13 +3,11 @@ package EHI1VSo_1_KillerBytes;
 import robocode.Robot;
 import robocode.ScannedRobotEvent;
 
-import java.awt.geom.Point2D;
-
 /**
  * Created by Nicky on 30/03/2016.
+ * TODO: Nicky, please summarize this class.
  */
 public class AdvancedEnemyBot extends EnemyBot {
-
     private double x;
     private double y;
 
@@ -41,13 +39,22 @@ public class AdvancedEnemyBot extends EnemyBot {
         this.y = y;
     }
 
-
+    /**
+     * Author: Nicky
+     * TODO: Nicky, please explain
+     */
     public void reset(){
         super.reset();
         setX(0);
         setY(0);
     }
 
+    /**
+     * Author: Nicky
+     * @param e
+     * @param robot
+     * TODO: Nicky, please explain
+     */
     public void update(ScannedRobotEvent e, Robot robot){
 
         super.update(e);
@@ -64,10 +71,22 @@ public class AdvancedEnemyBot extends EnemyBot {
 
     }
 
+    /**
+     * Author: Nicky
+     * @param when
+     * @return
+     * TODO: Nicky, please explains
+     */
     public double getFutureX(long when){
         return x + Math.sin(Math.toRadians(getHeading())) * getVelocity() * when;
     }
 
+    /**
+     * Author: Nicky
+     * @param when
+     * @return
+     * TODO: Nicky, please explain
+     */
     public double getFutureY(long when) {
         return y + Math.cos(Math.toRadians(getHeading())) * getVelocity() * when;
     }

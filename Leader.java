@@ -21,7 +21,6 @@ public class Leader extends KillerByte {
         enemyRobot.reset(); //Testing predictive shooting
         setTurnRadarRight(360); // Testing predictive shooting
 
-        //TODO: Broadcast an initialized object
         broadcastStats(allyStats);
         while(true){
             // SET RANDOM COLORS
@@ -46,6 +45,7 @@ public class Leader extends KillerByte {
         messageReceived(e);
     }
 
+    //region Debugging functions
     /**
      * Author: Gerton
      * @param g
@@ -115,4 +115,5 @@ public class Leader extends KillerByte {
                 g.drawString("ScanRange",(int)ally.getX()+600,(int)ally.getY());
             }
         }
-    }
+    //endregion
+}

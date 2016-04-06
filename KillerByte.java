@@ -13,6 +13,10 @@ import static robocode.util.Utils.normalRelativeAngleDegrees;
 
 /**
  * Created by kris on 10-3-16.
+ * Extends TeamRobot. It's a superclass of all our robots
+ * Implements Serializable. It can be sent as a message
+ * This class contains all functionality and behavior for every bot.
+ *
  */
 public class KillerByte extends TeamRobot implements Serializable {
     public String name;
@@ -23,6 +27,7 @@ public class KillerByte extends TeamRobot implements Serializable {
     public float movedir = 1;
     public boolean isLeader = false;
 
+    //region General
     /**
      * Author: Kris
      * Initializes standard variables. Called by every bot
@@ -32,177 +37,6 @@ public class KillerByte extends TeamRobot implements Serializable {
         allyStats.addAlly(new AllyBot(this));
         enemyStats = new EnemyStatistics();
     }
-
-    /**
-     * Author: Nicky
-     * TODO: Nicky, please explain
-     */
-    public void smartShooting(){
-
-        if (enemeyAdv.none()){
-            return;
-        }
-
-        // calculate for bullet
-        double firePower = Math.min(500 / enemeyAdv.getDistance(), 3);
-        double bulletSpeed = 20 - firePower * 3;
-        long time = (long)(enemeyAdv.getDistance() / bulletSpeed);
-
-        //Calculate future X and Y of target
-        double futureX = enemeyAdv.getFutureX(time);
-        double futureY = enemeyAdv.getFutureY(time);
-
-        double absDeg = 0;
-        if(enemeyAdv.getVelocity() == 0){
-            absDeg = absoluteBearing(getX(),getY(),enemeyAdv.getX(),enemeyAdv.getY());
-        }
-        else{
-            absDeg = absoluteBearing(getX(), getY(), futureX, futureY);
-        }
-
-        setTurnGunRight(normalizeBearing(absDeg - getGunHeading()));
-
-        if (getGunHeat() == 0 && Math.abs(getGunTurnRemaining()) < 10){
-            setFire(firePower);
-        }
-
-    }
-
-    /**
-     * Author: Nicky
-     * @param x1
-     * @param y1
-     * @param x2
-     * @param y2
-     * @return
-     * TODO: Nicky, please explain
-     */
-    public double absoluteBearing(double x1, double y1, double x2, double y2){
-        double xo = x2 - x1;
-        double yo = y2 - y1;
-        double hyp = Point2D.distance(x1, y1, x2, y2);
-        double arcSin = Math.toDegrees(Math.asin(xo / hyp));
-        double bearing = 0;
-
-        if (xo > yo && yo > 0) {
-            // lower left
-            bearing = arcSin;
-        } else if (xo < 0 && yo > 0) {
-            // lower right
-            bearing = 360 + arcSin;
-        } else if (xo > 0 && yo < 0) {
-            // upper left
-            bearing = 180 - arcSin;
-        } else if (xo < 0 && yo < 0) {
-            // upper right
-            bearing = 180 - arcSin;
-        }
-
-        return bearing;
-    }
-
-    /**
-     * Author: Nicky
-     * @param angle
-     * @return
-     * TODO: Nicky, please explain
-     */
-    public double normalizeBearing(double angle){
-
-        while (angle > 180){
-            angle -= 360;
-        }
-        while (angle < -180){
-            angle += 360;
-        }
-
-        return angle;
-    }
-
-    /**
-     * Author: Gerton
-     * @param event
-     * When a robot hits a wall, reverse.s
-     */
-    @Override
-    public void onHitWall(HitWallEvent event) {
-        reverseDirection();
-    }
-
-    /**
-     * Author: Gerton
-     * @param event
-     * When a robot hits another robot, reverse direction
-     */
-    @Override
-    public void onHitRobot(HitRobotEvent event) {
-        reverseDirection();
-    }
-
-    /**
-     * Author: Gerton
-     * The movedirection toggles between 1 and -1
-     */
-    private void reverseDirection(){
-        movedir = movedir *-1;
-    }
-
-    /**
-     * Author: Kris
-     * Function that lets the robot with a scanner chase the enemy
-     * @param targetTank The tank that we've spotted
-     * Deprecated. Implementation should be removed
-     */
-    @Deprecated
-    public void chase( ScannedRobotEvent targetTank){
-        if(!targetTank.getName().startsWith("EHI1VSo_1_KillerBytes")) {
-            //My radar is pointed towards the enemy, i need my body to point in the same direction
-            setTurnRight(targetTank.getBearing());
-
-            //my radar needs to lock on to the target.
-            double radarPosition = normalRelativeAngleDegrees(targetTank.getBearing() +  getHeading() - getRadarHeading());
-            setTurnRadarRight(radarPosition);
-
-            double directionToTarget = getHeading() - getGunHeading();
-            setTurnGunRight(directionToTarget);
-
-            setAhead(targetTank.getDistance() );
-
-            if(targetTank.getDistance() < 140){
-                if(targetTank.getDistance() > 120){
-                    setFire(targetTank, 1.5);
-                } else if (targetTank.getDistance() > 100) {
-                    setFire(targetTank, 2);
-                }
-                else {
-                    setFire(targetTank, 3);
-                }
-            }
-        }
-        else{
-            if(targetTank.getDistance() < 60) {
-                setBack(20);
-                setTurnRight(20);
-            }
-            System.out.println("Ally " + targetTank.getName() + " is in the way!");
-        }
-    }
-
-    /**
-     * Author: Nicky
-     * @param e
-     * @return
-     * TODO: Nicky, please explain
-     */
-    public double[] calculateCoordinates(ScannedRobotEvent e){
-        double absoluteBearing = getHeadingRadians() + e.getBearingRadians();
-
-        double enemyX = getX() + (e.getDistance() * Math.sin(absoluteBearing));
-        double enemyY = getY() + (e.getDistance() * Math.cos(absoluteBearing));
-
-        return new double[]{enemyX, enemyY};
-    }
-
     /**
      * Author: Kris
      * @param target
@@ -244,80 +78,17 @@ public class KillerByte extends TeamRobot implements Serializable {
     }
 
     /**
-     * Author: Nicky
-     * @param coords
-     * TODO: Nicky, please explain
-     * Deprecated? Isn't MoveTo used instead?
-     */
-    public void goTo(double[] coords) {
-        double x = coords[0];
-        double y = coords[1];
-
-	/* Calculate the turn required to get there */
-        double angleToTarget = getAngle(coords);
-        double targetAngle = Utils.normalRelativeAngle(angleToTarget - getHeadingRadians());
-
-        //Stelling v pythagoras
-        double distanceToEnemyX = Math.abs(getX() - x);
-        double distanceToEnemyY = Math.abs(getY() - y);
-        double distance = Math.sqrt((Math.pow(distanceToEnemyX, 2) + Math.pow(distanceToEnemyY, 2)));
-
-
-        System.out.println(String.valueOf(distance));
-        if(true){
-            System.out.println("yes");
-            System.out.println(String.valueOf(enemeyAdv.getBearing()));
-            circleTarget(angleToTarget, distance);
-            return;
-        }
-
-        System.out.println(targetAngle);
-        double turnAngle = Math.atan(Math.tan(targetAngle));
-        setTurnRightRadians(turnAngle);
-
-        setAhead(distance * movedir);
-
-	/* This is a simple method of performing set front as back */
-    }
-
-    /**
-     * Author: Gerton
-     * @param angleToTarget
-     * @param distanceToTarget
+     * Author: Gerton / Remy?
      * TODO: Gerton, please explain
+     * TODO: Remy, please explain
      */
-    private void circleTarget(double angleToTarget,double distanceToTarget) {
-        Double tankTurn;
-
-        System.out.println("Too Close");
-        // Circle around it.
-        if(movedir == 1){
-            System.out.println("Too Close");
-            // Circle around it.
-            tankTurn = Utils.normalRelativeAngleDegrees(enemeyAdv.getBearing() +80);
-            System.out.println(tankTurn);
-        }
-        else{
-            tankTurn = Utils.normalRelativeAngleDegrees(enemeyAdv.getBearing() +100);
-
-        }
-
-        setTurnRight(tankTurn);
-        setAhead(50*movedir);
+    public void randomColor(){
+        Random random = new Random();
+        this.setColors(Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()), Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()), Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()));
     }
+    //endregion
 
-    /**
-     * Author: Nicky / Kris / Internet (SHould we source?)
-     * @param coords
-     * @return the angle between 2 points. Result is -180 to +180. -160 is a left turn, +160 is a right turn
-     */
-    private double getAngle(double[] coords){// x, double y){
-        double x = coords[0] - getX();
-        double y = coords[1] - getY();
-
-        return Math.atan2(x, y);
-    }
-
+    //region Communication
     /**
      * Author: Kris
      * @param stats
@@ -415,14 +186,113 @@ public class KillerByte extends TeamRobot implements Serializable {
         }
     }
 
+    //endregion
+
+    //region Movement
     /**
-     * Author: Gerton / Remy?
-     * TODO: Gerton, please explain
-     * TODO: Remy, please explain
+     * Author: Nicky
+     * @param coords
+     * TODO: Nicky, please explain
+     * Deprecated? Isn't MoveTo used instead?
      */
-    public void randomColor(){
-        Random random = new Random();
-        this.setColors(Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()), Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()), Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()));
+    public void goTo(double[] coords) {
+        double x = coords[0];
+        double y = coords[1];
+
+	/* Calculate the turn required to get there */
+        double angleToTarget = getAngle(coords);
+        double targetAngle = Utils.normalRelativeAngle(angleToTarget - getHeadingRadians());
+
+        //Stelling v pythagoras
+        double distanceToEnemyX = Math.abs(getX() - x);
+        double distanceToEnemyY = Math.abs(getY() - y);
+        double distance = Math.sqrt((Math.pow(distanceToEnemyX, 2) + Math.pow(distanceToEnemyY, 2)));
+
+
+        System.out.println(String.valueOf(distance));
+        if(true){
+            System.out.println("yes");
+            System.out.println(String.valueOf(enemeyAdv.getBearing()));
+            circleTarget(angleToTarget, distance);
+            return;
+        }
+
+        System.out.println(targetAngle);
+        double turnAngle = Math.atan(Math.tan(targetAngle));
+        setTurnRightRadians(turnAngle);
+
+        setAhead(distance * movedir);
+
+	/* This is a simple method of performing set front as back */
+    }
+
+    /**
+     * Author: Gerton
+     * @param angleToTarget
+     * @param distanceToTarget
+     * TODO: Gerton, please explain
+     */
+    private void circleTarget(double angleToTarget,double distanceToTarget) {
+        Double tankTurn;
+
+        System.out.println("Too Close");
+        // Circle around it.
+        if(movedir == 1){
+            System.out.println("Too Close");
+            // Circle around it.
+            tankTurn = Utils.normalRelativeAngleDegrees(enemeyAdv.getBearing() +80);
+            System.out.println(tankTurn);
+        }
+        else{
+            tankTurn = Utils.normalRelativeAngleDegrees(enemeyAdv.getBearing() +100);
+
+        }
+
+        setTurnRight(tankTurn);
+        setAhead(50*movedir);
+    }
+
+    /**
+     * Author: Gerton
+     * The movedirection toggles between 1 and -1
+     */
+    private void reverseDirection(){
+        movedir = movedir *-1;
+    }
+
+    /**
+     * Author: Nicky
+     * TODO: Nicky, please explain
+     */
+    public void smartShooting(){
+
+        if (enemeyAdv.none()){
+            return;
+        }
+
+        // calculate for bullet
+        double firePower = Math.min(500 / enemeyAdv.getDistance(), 3);
+        double bulletSpeed = 20 - firePower * 3;
+        long time = (long)(enemeyAdv.getDistance() / bulletSpeed);
+
+        //Calculate future X and Y of target
+        double futureX = enemeyAdv.getFutureX(time);
+        double futureY = enemeyAdv.getFutureY(time);
+
+        double absDeg = 0;
+        if(enemeyAdv.getVelocity() == 0){
+            absDeg = absoluteBearing(getX(),getY(),enemeyAdv.getX(),enemeyAdv.getY());
+        }
+        else{
+            absDeg = absoluteBearing(getX(), getY(), futureX, futureY);
+        }
+
+        setTurnGunRight(normalizeBearing(absDeg - getGunHeading()));
+
+        if (getGunHeat() == 0 && Math.abs(getGunTurnRemaining()) < 10){
+            setFire(firePower);
+        }
+
     }
 
     /**
@@ -442,7 +312,90 @@ public class KillerByte extends TeamRobot implements Serializable {
 
 
     }
+    //endregion
 
+    //region Calculations
+    /**
+     * Author: Nicky / Kris / Internet (SHould we source?)
+     * @param coords
+     * @return the angle between 2 points. Result is -180 to +180. -160 is a left turn, +160 is a right turn
+     */
+    private double getAngle(double[] coords){// x, double y){
+        double x = coords[0] - getX();
+        double y = coords[1] - getY();
+
+        return Math.atan2(x, y);
+    }
+
+    /**
+     * Author: Nicky
+     * @param e
+     * @return
+     * TODO: Nicky, please explain
+     */
+    public double[] calculateCoordinates(ScannedRobotEvent e){
+        double absoluteBearing = getHeadingRadians() + e.getBearingRadians();
+
+        double enemyX = getX() + (e.getDistance() * Math.sin(absoluteBearing));
+        double enemyY = getY() + (e.getDistance() * Math.cos(absoluteBearing));
+
+        return new double[]{enemyX, enemyY};
+    }
+
+    /**
+     * Author: Nicky
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     * @return
+     * TODO: Nicky, please explain
+     */
+    public double absoluteBearing(double x1, double y1, double x2, double y2){
+        double xo = x2 - x1;
+        double yo = y2 - y1;
+        double hyp = Point2D.distance(x1, y1, x2, y2);
+        double arcSin = Math.toDegrees(Math.asin(xo / hyp));
+        double bearing = 0;
+
+        if (xo > yo && yo > 0) {
+            // lower left
+            bearing = arcSin;
+        } else if (xo < 0 && yo > 0) {
+            // lower right
+            bearing = 360 + arcSin;
+        } else if (xo > 0 && yo < 0) {
+            // upper left
+            bearing = 180 - arcSin;
+        } else if (xo < 0 && yo < 0) {
+            // upper right
+            bearing = 180 - arcSin;
+        }
+
+        return bearing;
+    }
+
+    /**
+     * Author: Nicky
+     * @param angle
+     * @return
+     * TODO: Nicky, please explain
+     */
+    public double normalizeBearing(double angle){
+
+        while (angle > 180){
+            angle -= 360;
+        }
+        while (angle < -180){
+            angle += 360;
+        }
+
+        return angle;
+    }
+
+    //endregion
+
+    //region Events
     /**
      * Author: Remy
      * TODO: Remy, please explain
@@ -465,6 +418,7 @@ public class KillerByte extends TeamRobot implements Serializable {
      *      If so, updates allystats and broadcasts
      *      If not, updates enemystats and broadcasts
      */
+    @Override
     public void onRobotDeath(RobotDeathEvent e){
         if(!isLeader){
             if(e.getName().startsWith("EHI1VSo_1_KillerBytes")){//Ally died
@@ -492,5 +446,68 @@ public class KillerByte extends TeamRobot implements Serializable {
 
         }
     }
+
+    /**
+     * Author: Gerton
+     * @param event
+     * When a robot hits a wall, reverse.s
+     */
+    @Override
+    public void onHitWall(HitWallEvent event) {
+        reverseDirection();
+    }
+
+    /**
+     * Author: Gerton
+     * @param event
+     * When a robot hits another robot, reverse direction
+     */
+    @Override
+    public void onHitRobot(HitRobotEvent event) {
+        reverseDirection();
+    }
+    //endregion
+
+    /**
+     * Author: Kris
+     * Function that lets the robot with a scanner chase the enemy
+     * @param targetTank The tank that we've spotted
+     * Deprecated. Implementation should be removed
+     */
+    @Deprecated
+    public void chase( ScannedRobotEvent targetTank){
+        if(!targetTank.getName().startsWith("EHI1VSo_1_KillerBytes")) {
+            //My radar is pointed towards the enemy, i need my body to point in the same direction
+            setTurnRight(targetTank.getBearing());
+
+            //my radar needs to lock on to the target.
+            double radarPosition = normalRelativeAngleDegrees(targetTank.getBearing() +  getHeading() - getRadarHeading());
+            setTurnRadarRight(radarPosition);
+
+            double directionToTarget = getHeading() - getGunHeading();
+            setTurnGunRight(directionToTarget);
+
+            setAhead(targetTank.getDistance() );
+
+            if(targetTank.getDistance() < 140){
+                if(targetTank.getDistance() > 120){
+                    setFire(targetTank, 1.5);
+                } else if (targetTank.getDistance() > 100) {
+                    setFire(targetTank, 2);
+                }
+                else {
+                    setFire(targetTank, 3);
+                }
+            }
+        }
+        else{
+            if(targetTank.getDistance() < 60) {
+                setBack(20);
+                setTurnRight(20);
+            }
+            System.out.println("Ally " + targetTank.getName() + " is in the way!");
+        }
+    }
+
 
 }

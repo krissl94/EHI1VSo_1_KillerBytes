@@ -1,7 +1,5 @@
 package EHI1VSo_1_KillerBytes;
 
-import robocode.ScannedRobotEvent;
-
 import java.io.Serializable;
 
 /**

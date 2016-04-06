@@ -2,13 +2,7 @@ package EHI1VSo_1_KillerBytes;
 
 import robocode.MessageEvent;
 import robocode.ScannedRobotEvent;
-import robocode.TeamRobot;
-
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.Map;
-
-import static robocode.util.Utils.normalRelativeAngleDegrees;
 
 /**
  * Created by kris on 9-3-16.
@@ -39,6 +33,12 @@ public class RobotOne extends KillerByte implements Serializable {
             execute();
         }
     }
+
+    /**
+     * Author: Gerton / Kris
+     * @param TargetTank
+     * TODO: Gerton, what's going on here?
+     */
     public void onScannedRobot(ScannedRobotEvent TargetTank){
         if(TargetTank.getName().equals(enemyStats.getTargetName())){
             System.out.println("YES I NEED UPDATE PLS");
