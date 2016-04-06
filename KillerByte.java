@@ -2,16 +2,13 @@ package EHI1VSo_1_KillerBytes;
 
 import robocode.*;
 import robocode.util.Utils;
-import sun.plugin2.message.Message;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Random;
 
-import static robocode.util.Utils.normalAbsoluteAngle;
 import static robocode.util.Utils.normalRelativeAngleDegrees;
 
 /**
@@ -26,12 +23,20 @@ public class KillerByte extends TeamRobot implements Serializable {
     public float movedir = 1;
     public boolean isLeader = false;
 
+    /**
+     * Author: Kris
+     * Initializes standard variables. Called by every bot
+     */
     public void init(){
         allyStats = new AllyStatistics("EHI1VSo_1_KillerBytes.Leader");
         allyStats.addAlly(new AllyBot(this));
         enemyStats = new EnemyStatistics();
     }
 
+    /**
+     * Author: Nicky
+     * TODO: Nicky, please explain
+     */
     public void smartShooting(){
 
         if (enemeyAdv.none()){
@@ -63,6 +68,15 @@ public class KillerByte extends TeamRobot implements Serializable {
 
     }
 
+    /**
+     * Author: Nicky
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     * @return
+     * TODO: Nicky, please explain
+     */
     public double absoluteBearing(double x1, double y1, double x2, double y2){
         double xo = x2 - x1;
         double yo = y2 - y1;
@@ -87,6 +101,12 @@ public class KillerByte extends TeamRobot implements Serializable {
         return bearing;
     }
 
+    /**
+     * Author: Nicky
+     * @param angle
+     * @return
+     * TODO: Nicky, please explain
+     */
     public double normalizeBearing(double angle){
 
         while (angle > 180){
@@ -99,28 +119,42 @@ public class KillerByte extends TeamRobot implements Serializable {
         return angle;
     }
 
+    /**
+     * Author: Gerton
+     * @param event
+     * When a robot hits a wall, reverse.s
+     */
     @Override
     public void onHitWall(HitWallEvent event) {
         reverseDirection();
     }
 
+    /**
+     * Author: Gerton
+     * @param event
+     * When a robot hits another robot, reverse direction
+     */
     @Override
     public void onHitRobot(HitRobotEvent event) {
         reverseDirection();
     }
 
+    /**
+     * Author: Gerton
+     * The movedirection toggles between 1 and -1
+     */
     private void reverseDirection(){
         movedir = movedir *-1;
     }
 
     /**
+     * Author: Kris
      * Function that lets the robot with a scanner chase the enemy
      * @param targetTank The tank that we've spotted
+     * Deprecated. Implementation should be removed
      */
+    @Deprecated
     public void chase( ScannedRobotEvent targetTank){
-        //TODO: MoveTo target, calculate which coordinates
-        //TODO:                      If health is low, keep distance
-        //TODO:                      If health is high, go in for a ram
         if(!targetTank.getName().startsWith("EHI1VSo_1_KillerBytes")) {
             //My radar is pointed towards the enemy, i need my body to point in the same direction
             setTurnRight(targetTank.getBearing());
@@ -154,6 +188,12 @@ public class KillerByte extends TeamRobot implements Serializable {
         }
     }
 
+    /**
+     * Author: Nicky
+     * @param e
+     * @return
+     * TODO: Nicky, please explain
+     */
     public double[] calculateCoordinates(ScannedRobotEvent e){
         double absoluteBearing = getHeadingRadians() + e.getBearingRadians();
 
@@ -163,14 +203,23 @@ public class KillerByte extends TeamRobot implements Serializable {
         return new double[]{enemyX, enemyY};
     }
 
+    /**
+     * Author: Kris
+     * @param target
+     * @param power
+     * Override with an extra parameter to check if we're firing at an ally
+     */
     public void setFire(ScannedRobotEvent target, double power){
-        //TODO: Check if an ally is in the way.
-        //TODO: If an ally is in the way and his energy is low, tell him to move
         if(!target.getName().startsWith("EHI1VSo_1_KillerBytes")) {
             setFire(power);
         }
     }
 
+    /**
+     * Author: Nicky?
+     * @param coords
+     * TODO: Nicky, Please explain, remove comments.
+     */
     public void shootAt(double[] coords){
         //Don't fire if anyone is in my line of fire
         //Calculate line of fire..
@@ -194,6 +243,12 @@ public class KillerByte extends TeamRobot implements Serializable {
         setFire(3);
     }
 
+    /**
+     * Author: Nicky
+     * @param coords
+     * TODO: Nicky, please explain
+     * Deprecated? Isn't MoveTo used instead?
+     */
     public void goTo(double[] coords) {
         double x = coords[0];
         double y = coords[1];
@@ -225,6 +280,12 @@ public class KillerByte extends TeamRobot implements Serializable {
 	/* This is a simple method of performing set front as back */
     }
 
+    /**
+     * Author: Gerton
+     * @param angleToTarget
+     * @param distanceToTarget
+     * TODO: Gerton, please explain
+     */
     private void circleTarget(double angleToTarget,double distanceToTarget) {
         Double tankTurn;
 
@@ -246,9 +307,8 @@ public class KillerByte extends TeamRobot implements Serializable {
     }
 
     /**
-     *
-     * //@param x
-     * //@param y
+     * Author: Nicky / Kris / Internet (SHould we source?)
+     * @param coords
      * @return the angle between 2 points. Result is -180 to +180. -160 is a left turn, +160 is a right turn
      */
     private double getAngle(double[] coords){// x, double y){
@@ -259,22 +319,10 @@ public class KillerByte extends TeamRobot implements Serializable {
     }
 
     /**
-     * Not implemented yet, but might be a nice one
-     * @param distance
-     * @param bearing
+     * Author: Kris
+     * @param stats
+     * Override of the Broadcast function with a Try/Catch built in.
      */
-    public void moveWithBackAsFront(double distance, double bearing) {
-        double angle = Utils.normalRelativeAngle(bearing - getHeadingRadians());
-        double turnAngle = Math.atan(Math.tan(angle));
-        setTurnRightRadians(turnAngle);
-        int direction = angle == turnAngle ? 1 : -1;
-        setAhead(distance * direction);
-//        turnRightRadians(e.getBearingRadians());
-//        setAhead(enemyDistance);
-//        fire(2);
-
-    }
-
     public void broadcastStats(Serializable stats){
         //TODO: Broadcast data
         try{
@@ -285,25 +333,36 @@ public class KillerByte extends TeamRobot implements Serializable {
 
         }
     }
+
+    /**
+     * Author: Kris
+     * @param leader
+     * Report to the leader. Sends an object of AllyBot that is created from this Killerbyte instance
+     */
     public void reportTo(String leader){
         try{
             sendMessage(leader, new AllyBot(this));
         } catch(IOException IOE){
-
+            //TODO: Some error handling may be nice
         }
     }
-    public void messageReceived(MessageEvent e){
 
+    /**
+     * Author: Kris
+     * @param e
+     * Checks if the bot that received a message is a leader and coordinates what to do accordingly
+     */
+    public void messageReceived(MessageEvent e){
         if(!isLeader){
             robotProcessData(e);
         }
         else {
             leaderProcessData(e);
         }
-
     }
 
     /**
+     * Author: Kris
      * Custom sendMessage that handles try catch itself, keeping code clean
      * @param name
      * @param msg
@@ -313,11 +372,12 @@ public class KillerByte extends TeamRobot implements Serializable {
             sendMessage(name, msg);
         }
         catch (IOException IOE){
-            //Todo: leader isn't receiving me D:
+            //TODO: Some error handling may be nice
         }
     }
 
     /**
+     * Author: Kris
      * Robots process data
      * @param e
      * e can be allyStats, enemyStats (optionally: [or a request to register to the Leader]).
@@ -331,10 +391,10 @@ public class KillerByte extends TeamRobot implements Serializable {
     }
 
     /**
+     * Author: Kris
      * Leader processes the data of a message
-     *
      * @param e
-     * e can either be a friendly bot, or an enemy
+     * e can either contain a friendly bot, or an enemy
      */
     private void leaderProcessData(MessageEvent e){
         if(e.getMessage() instanceof AllyBot){
@@ -355,14 +415,21 @@ public class KillerByte extends TeamRobot implements Serializable {
         }
     }
 
-
+    /**
+     * Author: Gerton / Remy?
+     * TODO: Gerton, please explain
+     * TODO: Remy, please explain
+     */
     public void randomColor(){
-        //random colors
         Random random = new Random();
         this.setColors(Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()), Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()), Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()));
     }
 
-
+    /**
+     * Author: Kris
+     * If i have a target, attack him.
+     * First, we're gonna go to his coordinates and then we're gonna shoot him
+     */
     public void attack(){
         if(enemyStats != null && enemyStats.getTargetName() != null) {
             if(enemyStats.getEnemies().get(enemyStats.getTargetName()) != null){
@@ -376,6 +443,10 @@ public class KillerByte extends TeamRobot implements Serializable {
 
     }
 
+    /**
+     * Author: Remy
+     * TODO: Remy, please explain
+     */
     @Override
     public void onWin(WinEvent event) {
         turnRight(200);
@@ -383,6 +454,17 @@ public class KillerByte extends TeamRobot implements Serializable {
         ahead(0);
     }
 
+    /**
+     * Author: Kris
+     * @param e
+     * First, checks if this bot is the leader
+     *  If not, checks if an ally died
+     *      If an ally died, it might be the leader
+     *          If the leader died, assign a new leader
+     *  If isLeader, checks if ally died
+     *      If so, updates allystats and broadcasts
+     *      If not, updates enemystats and broadcasts
+     */
     public void onRobotDeath(RobotDeathEvent e){
         if(!isLeader){
             if(e.getName().startsWith("EHI1VSo_1_KillerBytes")){//Ally died

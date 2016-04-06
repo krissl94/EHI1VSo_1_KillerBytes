@@ -9,14 +9,26 @@ import java.util.ArrayList;
 
 /**
  * Created by kris on 9-3-16.
+ * Updated by Nicky on 30-3-16.
  */
 public class EnemyBot implements Serializable{
-    //private String name;
+    //region Kris' variables
     private double firstRecordedHealth;
     private double lastRecordedHealth;
     private String role;
     private ArrayList<double[]> recordedPositions;
+    //endregion
 
+    //region Nicky's variables
+    private double bearing;
+    private double distance;
+    private double energy;
+    private double heading;
+    private String name;
+    private double velocity;
+    //endregion
+
+    //region Constructors
     public EnemyBot(ScannedRobotEvent TargetTank, double[] coordinates){//String name, int firstRecordedHealth, int lastRecordedHealth, String role, int x, int y) {
         this.name = TargetTank.getName();
         this.firstRecordedHealth = TargetTank.getEnergy();
@@ -26,42 +38,88 @@ public class EnemyBot implements Serializable{
         this.recordedPositions.add(coordinates);
     }
 
+    public EnemyBot(){
+        reset();
+    }
+    //endregion
+
+    //region Getters and Setters
     public String getName() {
         return name;
     }
+    public double getFirstRecordedHealth() {
+        return firstRecordedHealth;
+    }
+    public double getLastRecordedHealth() {
+        return lastRecordedHealth;
+    }
+    public String getRole() {
+        return role;
+    }
+    public ArrayList<double[]> getRecordedPositions() {
+        return recordedPositions;
+    }
+    public double getBearing() {
+        return bearing;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public double getEnergy() {
+        return energy;
+    }
+
+    public double getHeading() {
+        return heading;
+    }
+
+    public double getVelocity() {
+        return velocity;
+    }
+
 
     public void setName(String name) {
         this.name = name;
     }
-
-    public double getFirstRecordedHealth() {
-        return firstRecordedHealth;
-    }
-
-    public double getLastRecordedHealth() {
-        return lastRecordedHealth;
-    }
-
     public void setLastRecordedHealth(double lastRecordedHealth) {
         this.lastRecordedHealth = lastRecordedHealth;
     }
-
-    public String getRole() {
-        return role;
-    }
-
     public void setRole() {
         this.role = role;
     }
-
-    public ArrayList<double[]> getRecordedPositions() {
-        return recordedPositions;
+    public void setBearing(double bearing) {
+        this.bearing = bearing;
     }
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+    public void setEnergy(double energy) {
+        this.energy = energy;
+    }
+    public void setHeading(double heading) {
+        this.heading = heading;
+    }
+    public void setVelocity(double velocity) {
+        this.velocity = velocity;
+    }
+    //endregion
 
+    /**
+     * Author: Kris
+     * @param xy
+     * A location is added to the recorded positions of this enemyBot
+     */
     public void addPosition(double[] xy){
         recordedPositions.add(xy);
     }
 
+    /**
+     * Author: Kris
+     * @param energy
+     * @return a String of the role of this scanned robot
+     */
     private String determineRole(double energy){
         if(energy > 120){
             return "leader";
@@ -74,6 +132,15 @@ public class EnemyBot implements Serializable{
         }
     }
 
+    /**
+     * Author: Kris
+     * @param targetTank
+     * @param x
+     * @param y
+     * @param headingRadians
+     * @return
+     * TODO: Deprecated?
+     */
     private double[] determinePosition(ScannedRobotEvent targetTank, double x, double y, double headingRadians){
 
         double myX = x;
@@ -96,69 +163,19 @@ public class EnemyBot implements Serializable{
         return new double[]{enemyX,enemyY};
     }
 
+    /**
+     * Author: Kris
+     * @return the last X and Y coordinations of this bot
+     */
     public double[] getLastRecordedPosition(){
         return this.recordedPositions.get(this.recordedPositions.size() - 1);
     }
 
-    public String toString(){
-//        return "Robot " + name + " was first recorded with" + firstRecordedHealth + "energy and is probably a " + role + ". He was last seen at " +  " his energy is " + lastRecordedHealth;
-        return "Robot " + name + " was first recorded with" + firstRecordedHealth + "energy and is probably a " + role + ". He was last seen at " + recordedPositions.get(recordedPositions.size() -1 )[0] + "," + recordedPositions.get(recordedPositions.size() -1 )[0] + " his energy is " + lastRecordedHealth;
-    }
-
-    //public EnemyBot(ScannedRobotEvent e) {
-
-    //}
-
-
-    //Predictive shooting with AdvancedEnemyBot
-
-    private double bearing;
-    private double distance;
-    private double energy;
-    private double heading;
-    private String name;
-    private double velocity;
-
-    public double getBearing() {
-        return bearing;
-    }
-
-    public double getDistance() {
-        return distance;
-    }
-
-    public double getEnergy() {
-        return energy;
-    }
-
-    public double getHeading() {
-        return heading;
-    }
-
-    public double getVelocity() {
-        return velocity;
-    }
-
-    public void setBearing(double bearing) {
-        this.bearing = bearing;
-    }
-
-    public void setDistance(double distance) {
-        this.distance = distance;
-    }
-
-    public void setEnergy(double energy) {
-        this.energy = energy;
-    }
-
-    public void setHeading(double heading) {
-        this.heading = heading;
-    }
-
-    public void setVelocity(double velocity) {
-        this.velocity = velocity;
-    }
-
+    /**
+     * Author: Nicky
+     * @param e
+     * TODO: Nicky, Please explain.
+     */
     public void update(ScannedRobotEvent e){
         bearing = e.getBearing();
         distance = e.getDistance();
@@ -166,9 +183,12 @@ public class EnemyBot implements Serializable{
         heading = e.getHeading();
         name = e.getName();
         velocity = e.getVelocity();
-
     }
 
+    /**
+     * Author: Nicky
+     * TODO: Nicky, please explain
+     */
     public void reset(){
         setName("");
         setBearing(0.0);
@@ -176,9 +196,13 @@ public class EnemyBot implements Serializable{
         setEnergy(0.0);
         setHeading(0.0);
         setVelocity(0.0);
-
     }
 
+    /**
+     * Author: Nicky
+     * @return
+     * TODO: Nicky, please explain
+     */
     public boolean none(){
         if (name.equals("")){
             return true;
@@ -187,9 +211,14 @@ public class EnemyBot implements Serializable{
         }
     }
 
-    public EnemyBot(){
-        reset();
+    /**
+     * Author: Gerton / Kris
+     * @return
+     * TODO: Gerton, please explain
+     */
+    public String toString(){
+//        return "Robot " + name + " was first recorded with" + firstRecordedHealth + "energy and is probably a " + role + ". He was last seen at " +  " his energy is " + lastRecordedHealth;
+        return "Robot " + name + " was first recorded with" + firstRecordedHealth + "energy and is probably a " + role + ". He was last seen at " + recordedPositions.get(recordedPositions.size() -1 )[0] + "," + recordedPositions.get(recordedPositions.size() -1 )[0] + " his energy is " + lastRecordedHealth;
     }
-
 
 }

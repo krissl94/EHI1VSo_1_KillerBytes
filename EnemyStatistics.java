@@ -1,11 +1,7 @@
 package EHI1VSo_1_KillerBytes;
 
-import robocode.ScannedRobotEvent;
-import robocode.TeamRobot;
-
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class EnemyStatistics implements Serializable{
@@ -15,6 +11,18 @@ public class EnemyStatistics implements Serializable{
     private String targetName;
     private Map<String, EnemyBot> enemies;
 
+    public EnemyStatistics() {
+        this.leaderAlive = true;
+        this.droidsAlive = 0;
+        this.robotsAlive = 0;
+        enemies = new HashMap<>();
+    }
+
+    /**
+     * Author: Kris
+     * @param role
+     * @return an enemybot's name that has a certain role
+     */
     public String getTargetByRole(String role){
         for(Map.Entry<String,EnemyBot> entry: enemies.entrySet()) {
             EnemyBot enemy = entry.getValue();
@@ -27,13 +35,6 @@ public class EnemyStatistics implements Serializable{
 
     public String getTargetName() {
         return targetName;
-    }
-
-    public EnemyStatistics() {
-        this.leaderAlive = true;
-        this.droidsAlive = 0;
-        this.robotsAlive = 0;
-        enemies = new HashMap<>();
     }
 
     public boolean isLeaderAlive() {
@@ -58,10 +59,21 @@ public class EnemyStatistics implements Serializable{
         return enemies;
     }
 
+    /**
+     * Author: Gerton
+     * @return a boolean stating if the enemies map is empty
+     */
     public boolean hasEnemiesRegistered(){
         return this.enemies.size() > 0;
     }
 
+    /**
+     * Author: Kris
+     * @param enemy
+     * Adds an enemy to the enemies HashMap
+     * If no target is set, this one becomes the target.
+     *  If a target is set, but this enemy is the leader, the target is reassigned to this bot.
+     */
     public void addEnemy(EnemyBot enemy ){
         if(targetName == null){
             targetName = enemy.getName();
@@ -79,6 +91,12 @@ public class EnemyStatistics implements Serializable{
                 break;
         }
     }
+
+    /**
+     * Author: Gerton
+     * @param enemy
+     * TODO: Gerton, please explain
+     */
     public void updateEnemy(EnemyBot enemy){
         //TODO: Update instead of Replace
         EnemyBot bot = this.enemies.get(enemy.getName());
@@ -88,6 +106,11 @@ public class EnemyStatistics implements Serializable{
         bot.addPosition(lastCoordinates);
     }
 
+    /**
+     * Author: Kris
+     * @param enemy
+     * Check role of deceased enemy and execute according function
+     */
     public void enemyDied(EnemyBot enemy){
         if(enemy.getRole().equals("droid")){
             this.droidDied();
@@ -111,6 +134,10 @@ public class EnemyStatistics implements Serializable{
         enemies.remove(enemy.getName());
     }
 
+    /**
+     * Author: Kris / Gerton
+     * @return a String value of the enemyStatistics
+     */
     public String toString(){
         String toReturn = "/-------------------------------------/\r\n";
         toReturn += "Enemy leader is alive " + leaderAlive + " and they have " + robotsAlive +" living robots" + " and " + droidsAlive + "living droids";
@@ -123,9 +150,6 @@ public class EnemyStatistics implements Serializable{
         toReturn+="++++++++++++++++++++\r\n";
         toReturn+="/-------------------------------------/\r\n";
         return toReturn;
-    }
-    public void updateTarget(){
-
     }
 
 }

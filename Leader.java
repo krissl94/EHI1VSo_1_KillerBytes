@@ -1,23 +1,15 @@
 package EHI1VSo_1_KillerBytes;
 
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import robocode.MessageEvent;
-import robocode.RobotDeathEvent;
 import robocode.ScannedRobotEvent;
-import robocode.TeamRobot;
-//TODO Delete in final
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * Created by kris on 9-3-16.
  */
 public class Leader extends KillerByte {
-
     private AdvancedEnemyBot enemyRobot = new AdvancedEnemyBot();
 
     public void run(){
@@ -46,23 +38,28 @@ public class Leader extends KillerByte {
         }
     }
 
-    //Leader has no specific tasks, because another robot should be able to take over the position
     public void onScannedRobot(ScannedRobotEvent TargetTank){
         super.chase(TargetTank);
     }
 
     public void onMessageReceived(MessageEvent e){
-        //TODO: Check if it's an enemy object or an ally object
-        // functie : isFriendly(name), ez
         messageReceived(e);
     }
 
-    //TODO Delete in final
+    /**
+     * Author: Gerton
+     * @param g
+     * TODO: Gerton, please explain
+     */
     public void onPaint(Graphics2D g){
         drawDebug(g);
     }
 
-    //TODO Delete in final
+    /**
+     * Author: Gerton
+     * @param g
+     * TODO: Gerton, please explain
+     */
     public void drawDebug(Graphics2D g){
         // Draw scan circles
         String[] teamMates = getTeammates();

@@ -1,7 +1,6 @@
 package EHI1VSo_1_KillerBytes;
 
 import robocode.MessageEvent;
-import robocode.TeamRobot;
 
 import java.io.Serializable;
 

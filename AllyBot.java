@@ -6,6 +6,8 @@ import java.io.Serializable;
 
 /**
  * Created by kris on 17-3-16.
+ * Class that contains ally data.
+ * Implements Serializable, because it is sent as a message
  */
 public class AllyBot implements Serializable{
     private String name;
