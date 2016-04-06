@@ -50,16 +50,16 @@ public class KillerByte extends TeamRobot implements Serializable {
     }
 
     /**
-     * Author: Nicky?
+     * Author: Gerton? / Kris?
      * @param coords
-     * TODO: Nicky, Please explain, remove comments.
+     * Instructs a bot to shoo
      */
     public void shootAt(double[] coords){
         //Don't fire if anyone is in my line of fire
         //Calculate line of fire..
         //Gun position is known
         //
-        if(role .equals("droid")){
+        if(!role .equals("droid")){
             //Set
             //my radar needs to lock on to the target.
             double radarPosition = normalRelativeAngleDegrees(getAngle(coords));
