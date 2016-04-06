@@ -24,8 +24,8 @@ public class KillerByte extends TeamRobot implements Serializable {
     public EnemyStatistics enemyStats = null;
     public AdvancedEnemyBot enemeyAdv = new AdvancedEnemyBot();
     public float movedir = 1;
+    public boolean isLeader = false;
 
-    Boolean isLeader = false;
     public void init(){
         allyStats = new AllyStatistics("EHI1VSo_1_KillerBytes.Leader");
         allyStats.addAlly(new AllyBot(this));
