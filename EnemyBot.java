@@ -173,8 +173,7 @@ public class EnemyBot implements Serializable{
     }
 
 
-    // Author: Nicky
-    // Used source: http://mark.random-article.com/weber/java/ch4/lab3.html
+    //region Source: http://mark.random-article.com/weber/java/ch4/lab3.html
     /**
      * Author: Nicky
      * @param e
@@ -214,7 +213,7 @@ public class EnemyBot implements Serializable{
             return false;
         }
     }
-
+    //endregion
     /**
      * Author: Gerton / Kris
      * @return

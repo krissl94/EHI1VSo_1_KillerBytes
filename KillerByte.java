@@ -380,9 +380,9 @@ public class KillerByte extends TeamRobot implements Serializable {
 
     /**
      * Author: Nicky
-     * @param angle
-     * @return normalized angle
-     * Normalizes the bearing angle
+     * @param angle (input is 0 to 360 degrees)
+     * @return normalized angle (-180 to 180 degrees)
+     * Normalizes the bearing angle.
      */
     public double normalizeBearing(double angle){
 
