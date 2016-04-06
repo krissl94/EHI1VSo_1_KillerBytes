@@ -215,7 +215,7 @@ public class EnemyBot implements Serializable{
     /**
      * Author: Gerton / Kris
      * @return
-     * TODO: Gerton, please explain
+     * Creates a String which can be output to the console, containing various information about itself.
      */
     public String toString(){
 //        return "Robot " + name + " was first recorded with" + firstRecordedHealth + "energy and is probably a " + role + ". He was last seen at " +  " his energy is " + lastRecordedHealth;

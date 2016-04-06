@@ -35,9 +35,10 @@ public class RobotOne extends KillerByte implements Serializable {
     }
 
     /**
-     * Author: Gerton / Kris
+     * Author: Gerton / Kris / Nicky
      * @param TargetTank
-     * TODO: Gerton, what's going on here?
+     * Checks if the current scanned tank is the current target, if so update the AdvancedEnemyBot instance of this object
+     * if i'm not the leader send this scannedRobotEvent information in a new EnemyBot instance to the leader.
      */
     public void onScannedRobot(ScannedRobotEvent TargetTank){
         if(TargetTank.getName().equals(enemyStats.getTargetName())){

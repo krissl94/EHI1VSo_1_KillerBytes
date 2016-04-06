@@ -49,7 +49,8 @@ public class Leader extends KillerByte {
     /**
      * Author: Gerton
      * @param g
-     * TODO: Gerton, please explain
+     * Activates the drawDebug function if the leader is painting
+     * passes the Graphics2D instance to drawDebug so it can paint
      */
     public void onPaint(Graphics2D g){
         drawDebug(g);
@@ -58,7 +59,10 @@ public class Leader extends KillerByte {
     /**
      * Author: Gerton
      * @param g
-     * TODO: Gerton, please explain
+     * Draw debug infromation
+     * Draws scan range circles around friendly bots
+     * Draws dots on the map on co-ordinates located in the EnemyStatistics class
+     * Draws a little slogan on the leader (for fun)
      */
     public void drawDebug(Graphics2D g){
         // Draw scan circles
@@ -86,7 +90,6 @@ public class Leader extends KillerByte {
                 ArrayList<double[]> positions = enemy.getRecordedPositions();
                 if(positions.size() > 0){
                     for (double[] position : positions) {
-                        // TODO : Check functionality after fixing position registration. (this should work)
                         if(position.length > 0){
                             // change color of square to red if it's the last entry
                             if (position[0] == positions.get(positions.size() - 1)[0] && position[1] == positions.get(positions.size() - 1)[1]) {
