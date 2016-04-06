@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Updated by Nicky on 30-3-16.
  * EnemyBot contains some information on the enemy.
  * Implements Serializable, because it can be sent as a message
- * TODO: Nicky, please explain your edits
+ * Superclass of AdvancedEnemyBot
  */
 public class EnemyBot implements Serializable{
     //region Kris' variables
@@ -172,10 +172,13 @@ public class EnemyBot implements Serializable{
         return this.recordedPositions.get(this.recordedPositions.size() - 1);
     }
 
+
+    // Author: Nicky
+    // Used source: http://mark.random-article.com/weber/java/ch4/lab3.html
     /**
      * Author: Nicky
      * @param e
-     * TODO: Nicky, Please explain.
+     * Update the information on the enemy robot.
      */
     public void update(ScannedRobotEvent e){
         bearing = e.getBearing();
@@ -188,7 +191,7 @@ public class EnemyBot implements Serializable{
 
     /**
      * Author: Nicky
-     * TODO: Nicky, please explain
+     * Reset the information on the enemy robot
      */
     public void reset(){
         setName("");
@@ -201,8 +204,8 @@ public class EnemyBot implements Serializable{
 
     /**
      * Author: Nicky
-     * @return
-     * TODO: Nicky, please explain
+     * @return if we have or don't have an enemy
+     * Determines if we have or don't have an enemy
      */
     public boolean none(){
         if (name.equals("")){

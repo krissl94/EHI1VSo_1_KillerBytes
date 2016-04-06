@@ -191,9 +191,9 @@ public class KillerByte extends TeamRobot implements Serializable {
     //region Movement
     /**
      * Author: Nicky
-     * @param coords
-     * TODO: Nicky, please explain
-     * Deprecated? Isn't MoveTo used instead?
+     * @param coords enemy x and y position
+     * The way to the enemy position is calculated using the Pythagorean theorem
+     *
      */
     public void goTo(double[] coords) {
         double x = coords[0];
@@ -251,7 +251,7 @@ public class KillerByte extends TeamRobot implements Serializable {
         }
 
         setTurnRight(tankTurn);
-        setAhead(50*movedir);
+        setAhead(50 * movedir);
     }
 
     /**
@@ -264,7 +264,9 @@ public class KillerByte extends TeamRobot implements Serializable {
 
     /**
      * Author: Nicky
-     * TODO: Nicky, please explain
+     * Fire in the direction of the future enemy position.
+     * Used source: http://mark.random-article.com/weber/java/robocode/lesson4.html
+     *
      */
     public void smartShooting(){
 
@@ -284,8 +286,7 @@ public class KillerByte extends TeamRobot implements Serializable {
         double absDeg = 0;
         if(enemeyAdv.getVelocity() == 0){
             absDeg = absoluteBearing(getX(),getY(),enemeyAdv.getX(),enemeyAdv.getY());
-        }
-        else{
+        } else {
             absDeg = absoluteBearing(getX(), getY(), futureX, futureY);
         }
 
@@ -332,8 +333,8 @@ public class KillerByte extends TeamRobot implements Serializable {
     /**
      * Author: Nicky
      * @param e
-     * @return
-     * TODO: Nicky, please explain
+     * @return enemy X and Y coordinates
+     * Calculate the enemy coordinates
      */
     public double[] calculateCoordinates(ScannedRobotEvent e){
         double absoluteBearing = getHeadingRadians() + e.getBearingRadians();
@@ -346,32 +347,32 @@ public class KillerByte extends TeamRobot implements Serializable {
 
     /**
      * Author: Nicky
-     * @param x1
-     * @param y1
-     * @param x2
-     * @param y2
-     * @return
-     * TODO: Nicky, please explain
+     * @param x1 current X
+     * @param y1 current Y
+     * @param x2 future X
+     * @param y2 future Y
+     * @return absolute Bearing
+     * Calculations for the absolute bearing between two points to use for smartShooting
      */
     public double absoluteBearing(double x1, double y1, double x2, double y2){
         double xo = x2 - x1;
         double yo = y2 - y1;
-        double hyp = Point2D.distance(x1, y1, x2, y2);
-        double arcSin = Math.toDegrees(Math.asin(xo / hyp));
+        double pred = Point2D.distance(x1, y1, x2, y2);
+        double invSin = Math.toDegrees(Math.asin(xo / pred)); // inverse sinus
         double bearing = 0;
 
         if (xo > yo && yo > 0) {
             // lower left
-            bearing = arcSin;
+            bearing = invSin;
         } else if (xo < 0 && yo > 0) {
             // lower right
-            bearing = 360 + arcSin;
+            bearing = 360 + invSin;
         } else if (xo > 0 && yo < 0) {
             // upper left
-            bearing = 180 - arcSin;
+            bearing = 180 - invSin;
         } else if (xo < 0 && yo < 0) {
             // upper right
-            bearing = 180 - arcSin;
+            bearing = 180 - invSin;
         }
 
         return bearing;
@@ -380,8 +381,8 @@ public class KillerByte extends TeamRobot implements Serializable {
     /**
      * Author: Nicky
      * @param angle
-     * @return
-     * TODO: Nicky, please explain
+     * @return normalized angle
+     * Normalizes the bearing angle
      */
     public double normalizeBearing(double angle){
 

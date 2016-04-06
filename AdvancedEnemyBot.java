@@ -5,7 +5,11 @@ import robocode.ScannedRobotEvent;
 
 /**
  * Created by Nicky on 30/03/2016.
- * TODO: Nicky, please summarize this class.
+ *
+ * Extends EnemyBot. It is a superclass of our enemy robots
+ * This class contains all the information of/for the enemy robot
+ * This class contains general methods for updating, resetting and clearing enemy information.
+ * Used source: http://mark.random-article.com/weber/java/ch5/lab4.html
  */
 public class AdvancedEnemyBot extends EnemyBot {
     private double x;
@@ -41,7 +45,7 @@ public class AdvancedEnemyBot extends EnemyBot {
 
     /**
      * Author: Nicky
-     * TODO: Nicky, please explain
+     * Reset the X and Y coordinates
      */
     public void reset(){
         super.reset();
@@ -53,7 +57,7 @@ public class AdvancedEnemyBot extends EnemyBot {
      * Author: Nicky
      * @param e
      * @param robot
-     * TODO: Nicky, please explain
+     * The x and y position on the robot is updated.
      */
     public void update(ScannedRobotEvent e, Robot robot){
 
@@ -73,9 +77,9 @@ public class AdvancedEnemyBot extends EnemyBot {
 
     /**
      * Author: Nicky
-     * @param when
-     * @return
-     * TODO: Nicky, please explains
+     * @param when the time needed that the enemyrobot is on its 'future x'
+     * @return  enemy's future X position
+     * Calculate the future x position of the enemy robot using its heading, velocity and when-time
      */
     public double getFutureX(long when){
         return x + Math.sin(Math.toRadians(getHeading())) * getVelocity() * when;
@@ -83,9 +87,9 @@ public class AdvancedEnemyBot extends EnemyBot {
 
     /**
      * Author: Nicky
-     * @param when
-     * @return
-     * TODO: Nicky, please explain
+     * @param when the time needed that the enemyrobot is on its 'future y'
+     * @return enemy's future Y position
+     * Calculate the future y position of the enemy robot using its heading, velocity and when-time
      */
     public double getFutureY(long when) {
         return y + Math.cos(Math.toRadians(getHeading())) * getVelocity() * when;
