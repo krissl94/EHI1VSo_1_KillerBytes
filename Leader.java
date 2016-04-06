@@ -67,6 +67,8 @@ public class Leader extends KillerByte {
         //Draw scan circle on self
         g.setColor(Color.green);
 
+        g.drawString("Taste the fucking rainbow",(int)this.getX()-30,(int)this.getY()+20);
+
         g.drawOval((int) this.getX() - 600, (int) this.getY() - 600, 1200, 1200);
         //draw labels on each sides of the circle.
         g.drawString("ScanRange",(int)this.getX()-600,(int)this.getY());

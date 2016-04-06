@@ -78,9 +78,9 @@ public class KillerByte extends TeamRobot implements Serializable {
     }
 
     /**
-     * Author: Gerton / Remy?
-     * TODO: Gerton, please explain
-     * TODO: Remy, please explain
+     * Author: Remy?
+     * Generates 3 randam numbers between 0.0 and 1, and uses this to create a new HSB (HUE, SATURATION, BRIGHTNESS) value to assign to a part of the bot.
+     * Each part of the bots receives its own random value.
      */
     public void randomColor(){
         Random random = new Random();
@@ -228,11 +228,13 @@ public class KillerByte extends TeamRobot implements Serializable {
 
     /**
      * Author: Gerton
-     * @param angleToTarget
-     * @param distanceToTarget
-     * TODO: Gerton, please explain
-     */
-    private void circleTarget(double angleToTarget,double distanceToTarget) {
+     * Creates a circling movement pattern around the current target.
+     * It uses the relativeAngleDegrees to get the required turn degrees to make sure the circling target is correct
+     * if the bot is reversing then change the circle movement into an oval to move towards the target
+     * Because it's based on direction (And there is never a prefered direction) there is a 50/50 chance of moving towards, or away from the target
+     * thus keeping a nice distance.
+     * */
+    private void circleTarget() {
         Double tankTurn;
 
         System.out.println("Too Close");
