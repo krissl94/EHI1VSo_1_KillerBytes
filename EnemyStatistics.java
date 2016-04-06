@@ -90,7 +90,7 @@ public class EnemyStatistics implements Serializable{
     /**
      * Author: Gerton
      * @param enemy
-     * TODO: Gerton, please explain
+     * Update the last known position of a certain EnemyBot in the EnemyBots array.
      */
     public void updateEnemy(EnemyBot enemy){
         //TODO: Update instead of Replace

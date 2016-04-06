@@ -213,7 +213,7 @@ public class KillerByte extends TeamRobot implements Serializable {
         if(true){
             System.out.println("yes");
             System.out.println(String.valueOf(enemeyAdv.getBearing()));
-            circleTarget(angleToTarget, distance);
+            circleTarget();
             return;
         }
 
