@@ -14,19 +14,19 @@ public class Leader extends KillerByte {
 
     public void run(){
         isLeader = true;
+        role = "leader";
         init();
         setAdjustGunForRobotTurn(true);
         setAdjustRadarForGunTurn(true);
         setAdjustRadarForRobotTurn(true);
         enemyRobot.reset(); //Testing predictive shooting
         setTurnRadarRight(360); // Testing predictive shooting
-
         broadcastStats(allyStats);
         while(true){
             // SET RANDOM COLORS
             System.out.println(enemyStats.toString());
             randomColor();
-            
+            attack();
 
             setTurnRadarRight(360);
             smartShooting();
