@@ -55,7 +55,7 @@ public class RobotTwo extends KillerByte implements Serializable{
                 //Don't do anything cus idk who to send to
             }
         } else {
-            //TODO: Update shit myself..
+            leaderScannedEnemy(TargetTank);
         }
     }
     public void onMessageReceived(MessageEvent e){

@@ -2,7 +2,10 @@ package EHI1VSo_1_KillerBytes;
 
 import robocode.MessageEvent;
 import robocode.ScannedRobotEvent;
+import sun.plugin2.message.Message;
+
 import java.io.Serializable;
+import java.lang.annotation.Target;
 
 /**
  * Created by kris on 9-3-16.
@@ -56,7 +59,7 @@ public class RobotOne extends KillerByte implements Serializable {
                 //Don't do anything cus idk who to send to
             }
         } else {
-            //TODO: Update shit myself..
+            leaderScannedEnemy(TargetTank);
         }
     }
 

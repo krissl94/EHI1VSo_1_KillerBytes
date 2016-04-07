@@ -186,6 +186,22 @@ public class KillerByte extends TeamRobot implements Serializable {
         }
     }
 
+    /**
+     * Author: Kris
+     * @param targetTank
+     * Leader processes data when he spots an enemy
+     */
+    public void leaderScannedEnemy(ScannedRobotEvent targetTank){
+        EnemyBot enemyBot = new EnemyBot(targetTank, calculateCoordinates(targetTank));
+
+        if (!(enemyStats.getEnemies().containsKey(enemyBot.getName()))) {
+            enemyStats.addEnemy(enemyBot);
+        } else {
+            enemyStats.updateEnemy(enemyBot);
+        }
+        broadcastStats(enemyStats);
+    }
+
     //endregion
 
     //region Movement
