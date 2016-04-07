@@ -38,7 +38,7 @@ public class Leader extends KillerByte {
     }
 
     public void onScannedRobot(ScannedRobotEvent TargetTank){
-        super.chase(TargetTank);
+        leaderScannedEnemy(TargetTank);
     }
 
     public void onMessageReceived(MessageEvent e){
